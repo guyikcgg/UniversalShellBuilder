@@ -13,6 +13,12 @@ int getopt(int argc, char *argv[], const char *optstring) {
 	unsigned osl = strlen(optstring);
 	char *auxptr;
 
+    // Every parameter checked?
+    if (argn >= argc) {
+        argn = 1;			// Prepare for next time the function is called
+        return -1;			// Say that everything is done
+    }
+
 	// Check if a clean has occurred
 	if (opterr == -1) {
 		opterr = 0;
@@ -27,12 +33,6 @@ int getopt(int argc, char *argv[], const char *optstring) {
 	if (ap > strlen(argv[argn])-1) /* if (!argv[argn][ap])*/{
 		argn++;
 		ap = 0;
-	}
-
-	// Every parameter checked?
-	if (argn >= argc) {
-		argn = 1;			// Prepare for next time the function is called
-		return -1;			// Say that everything is done
 	}
 
 	// Are we analyzing the first character of an argument? It should be a '-'
