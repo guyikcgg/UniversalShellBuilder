@@ -168,5 +168,5 @@ int cmd_help(int argc, char *argv[]) {
 /* cmd_not_valid: print a not-valid message and then print help */
 int cmd_not_valid(int argc, char *argv[]) {
     printf("'%s' is not recognized as a valid command." NL NL, argv[0]);
-    cmd_help(argc, argv);
+    cmd_help(0, argv);
 }
