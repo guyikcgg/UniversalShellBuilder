@@ -86,8 +86,9 @@ int cmd_echo(int argc, char *argv[]) {
 
     /* Act according to the options */
     if (!opt.help && !error) {
-        for (i = 1; i<argc; i++) {
-            printf("%s ", argv[i]);
+        for (i = opt.not_new_line?2:1; i<argc; i++) {
+            printf("%s", argv[i]);
+            if (i<argc-1) printf(" ");
         }
         if (!opt.not_new_line) {
             printf("\n");
