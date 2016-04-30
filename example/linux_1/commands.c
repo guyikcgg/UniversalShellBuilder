@@ -167,7 +167,8 @@ int cmd_help(int argc, char *argv[]) {
 		execute_command(2, &argv[1]);
 	} else {
 		// Print general help
-		cmd_system(1, &str_system);
+        argv[0] = str_system;
+		execute_command(1, &argv[0]);
 		printf("Available commands:" NL);
 		for (command=0; command<CMD_NOT_VALID; command++){
 			printf("%s" NL, command_list[command]);
