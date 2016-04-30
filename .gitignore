@@ -2,3 +2,4 @@
 *.gch
 *~
 *_OLD.*
+example/*/example
