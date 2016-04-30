@@ -5,13 +5,16 @@
 #define FALSE 0
 typedef char bool;
 
-const char* command_list[] = {
-    "echo",
-    "calculator",
-    "system",
-    "help"
+struct _command commands[] =
+{
+  COMMAND (echo),
+  COMMAND (calculator),
+  COMMAND (system),
+  COMMAND (help),
+  COMMAND (not_valid)
 };
-const unsigned n_commands = CMD_NOT_VALID;
+
+//const unsigned n_commands = CMD_NOT_VALID;
 
 /* separate_args: splits a message in arguments separated by ' ' */
 unsigned separate_args(char *msg, char *argv[]) {
@@ -28,38 +31,20 @@ unsigned separate_args(char *msg, char *argv[]) {
 
 /* execute_command: identifies the command from a list and executes it */
 void execute_command(int argc, char* argv[]) {
-	enum command_t command = CMD_NONE;
+	unsigned command;
 
 	/* Identify the command */
 	if (strlen(argv[0]))
-	for (++command; command<n_commands; command++) {
-		if (strcmp(command_list[command], argv[0]) == 0) {
-			break;
+	for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
+        //printf("%s" NL, commands[command].name);
+		if (strcmp(commands[command].name, argv[0]) == 0) {
+			commands[command].function(argc, argv);
+            return;
 		}
 	}
 
-	/* Execute the identified command */
-	switch (command) {
-		case CMD_ECHO:
-            cmd_echo(argc, argv);
-            break;
-        case CMD_CALCULATOR:
-            cmd_calculator(argc, argv);
-            break;
-        case CMD_SYSTEM:
-            cmd_system(argc, argv);
-            break;
-		case CMD_HELP:
-			cmd_help(argc, argv);
-			break;
-		case CMD_NOT_VALID:
-			printf("Error: '%s' is not recognized as a valid command." NL NL, argv[0]);
-			printf("Type 'help' the get a list of the availabe commands." NL);
-			break;
-		default:
-			printf("Error: 'command' reached default case (something strange happened...)" NL);
-			break;
-	}
+    cmd_not_valid(argc, argv);
+    return;
 }
 
 /* cmd_echo: print every argument separated by space */
@@ -159,7 +144,7 @@ int cmd_system(int argc, char *argv[]) {
 int cmd_help(int argc, char *argv[]) {
 	char help_c[] = "-h";
     char str_system[] = "system";
-	enum command_t command;
+    unsigned command;
 
 	if (argc>1 && strcmp(argv[1], "help")) {
 		// If they ask for help about a command, execute 'command -h'
@@ -170,9 +155,18 @@ int cmd_help(int argc, char *argv[]) {
         argv[0] = str_system;
 		execute_command(1, &argv[0]);
 		printf("Available commands:" NL);
-		for (command=0; command<CMD_NOT_VALID; command++){
-			printf("%s" NL, command_list[command]);
-		}
+        for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
+    		printf("%s" NL, commands[command].name);
+    	}
+
 		printf(NL "To get additional information about any command, type 'help [command]'" NL);
 	}
+
+    return 0;
+}
+
+/* cmd_not_valid: print a not-valid message and then print help */
+int cmd_not_valid(int argc, char *argv[]) {
+    printf("'%s' is not recognized as a valid command." NL NL, argv[0]);
+    cmd_help(argc, argv);
 }
