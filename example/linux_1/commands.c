@@ -77,12 +77,6 @@ int cmd_echo(int argc, char *argv[]) {
         	break;
         }
     }
-    // Use in case you expect 0 arguments
-/*
-    if (optind < argc) {
-    	error = CMD_ECHO_ERROR_OPTIONS;
-    }
-*/
 
     /* Act according to the options */
     if (!opt.help && !error) {
@@ -135,9 +129,75 @@ int cmd_calculator(int argc, char *argv[]) {
     return 0;
 }
 
-/* cmd_system: shows information about the system */
+/* cmd_system: print system information */
 int cmd_system(int argc, char *argv[]) {
-    return 0;
+    int c;
+    unsigned i;
+
+    enum {
+        CMD_SYSTEM_ERROR_NONE = 0,
+        CMD_SYSTEM_ERROR_OPTIONS,
+        CMD_SYSTEM_ERROR_GETOPT_DEFAULT,
+    } error = CMD_SYSTEM_ERROR_NONE;
+    struct {
+        bool help;
+    } opt = {FALSE};
+
+    /* Get every option */
+    while ((c = getopt(argc, argv, "h"))!=-1 && opt.help==FALSE) {
+        switch (c) {
+        case '?':
+        case 'h':
+            opt.help = TRUE;
+            break;
+        default:
+            error = CMD_SYSTEM_ERROR_GETOPT_DEFAULT;
+            break;
+        }
+    }
+    /* Return error when received arguments */
+    if (optind < argc) {
+        error = CMD_SYSTEM_ERROR_OPTIONS;
+    }
+
+    /* Act according to the options */
+    if (!opt.help && !error) {
+        printf("Universal Shell Builder (example/linux_1)\n");
+    }
+
+    /* Handle errors */
+        switch (error) {
+        case CMD_SYSTEM_ERROR_NONE:
+            break;
+        case CMD_SYSTEM_ERROR_OPTIONS:
+            printf("Error: the following arguments are not recognized as valid options ");
+            while (optind < argc)
+                printf("'%s' ", argv[optind++]);
+            printf(NL);
+            opt.help = TRUE;
+            break;
+        case CMD_SYSTEM_ERROR_GETOPT_DEFAULT:
+            printf("Error: 'getopt' reached default case (it returned character code 0%o ??\r\n", c);
+            printf(NL);
+            opt.help = TRUE;
+            break;
+        default:
+            printf("Error: an unknown error occurred");
+            printf(NL);
+            opt.help = TRUE;
+        }
+
+    /* Print help for this command */
+    if(opt.help) {
+        printf("system - print system information");
+        printf(NL NL);
+        printf("system [-h]");
+        printf(NL NL);
+    }
+
+    /* Exit the command */
+    clean_getopt();
+    return error;
 }
 
 
