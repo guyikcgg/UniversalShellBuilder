@@ -27,8 +27,7 @@
 /*****************************
 *          COMMANDS          *
 *****************************/
-struct _command commands[] =
-{
+struct _command commands[] = {
     // Your commands here ->
     COMMAND(example),
     // Always keep 'help' and 'not_valid' commands
@@ -71,9 +70,8 @@ void execute_command(int argc, char* argv[]) {
 	unsigned command;
 
 	/* Identify the command */
-	if (strlen(argv[0]))
+	if (*argv[0])
 	for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
-        //gprint("%s" NL, commands[command].name);
 		if (strcmp(commands[command].name, argv[0]) == 0) {
 			commands[command].function(argc, argv);
             return;
@@ -83,6 +81,34 @@ void execute_command(int argc, char* argv[]) {
     cmd_not_valid(argc, argv);
     return;
 }
+
+
+
+
+/*************************###sisale */
+int _argc; char *_argv[];
+int read_option(const char *opt, bool *flag, void *option) {
+    int c;
+    bool help = FALSE;
+
+    while ((c = getopt(_argc, _argv, opt))!=-1 && help==FALSE) {
+        switch (c) {
+        case '?':
+        case 'h':
+            opt.help = TRUE;
+            break;
+        case *opt:
+            *flag = TRUE;
+            option = optarg;
+            break;
+    }
+
+    clean_getopt();
+    return *flag;
+}
+
+/***************************************/
+
 
 
 /****************************
@@ -96,12 +122,14 @@ int cmd_example(int argc, char *argv[]) {
 	int c;
     struct {
         // Your option flags here ->
+        bool text;
 		bool help;
 	} opt = { FALSE };
+    char *text = NULL;
 
     // Expected number of options and non-option arguments
     const unsigned min_optind   = 0;
-    const unsigned max_optind   = 1;
+    const unsigned max_optind   = 5;
     const unsigned min_u_argc   = 0;
     const unsigned max_u_argc   = 0;
 
@@ -117,13 +145,17 @@ int cmd_example(int argc, char *argv[]) {
     unsigned i;
 
     /* Get every option */
-    while ((c = getopt(argc, argv, "h" /* <- Your options here */))!=-1 && opt.help==FALSE) {
+    while ((c = getopt(argc, argv, "ht:" /* <- Your options here */))!=-1 && opt.help==FALSE) {
         switch (c) {
         case '?':
         case 'h':
             opt.help = TRUE;
             break;
         // Set your option flags here ->
+        case 't':
+            opt.text = TRUE;
+            text = optarg;
+            break;
 
         default:
         	error = CMD_EXAMPLE_ERROR_GETOPT_DEFAULT;
@@ -146,6 +178,10 @@ int cmd_example(int argc, char *argv[]) {
         //-------------------------//
         //   Your main code here   //
         //-------------------------//
+        if (opt.text) {
+            gprint(text);
+            gprint(NL);
+        }
     }
 
     /* Handle errors */
