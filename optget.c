@@ -35,6 +35,12 @@ int getopt(int argc, char *argv[], const char *optstring) {
 		ap = 0;
 	}
 
+    // Every parameter checked? - yes, again
+    if (argn >= argc) {
+        argn = 1;			// Prepare for next time the function is called
+        return -1;			// Say that everything is done
+    }
+
 	// Are we analyzing the first character of an argument? It should be a '-'
 	while (ap == 0 && (optopt+optind)<argc) {			// Repeat this analysis until we find a real
 		if (argv[argn][0] == '-' && (argv[argn][1])) {	// option. Stop if we already analyzed every argument.
