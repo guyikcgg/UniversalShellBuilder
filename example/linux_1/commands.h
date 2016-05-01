@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../../optget.h"
+#include "../../getopt.h"
 
 #define COMMAND(NAME)  { #NAME, cmd_ ## NAME }
 

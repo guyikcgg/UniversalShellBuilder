@@ -4,7 +4,7 @@
 *******************************************************************************/
 
 /* INCLUDES */
-#include "optget.h"
+#include "getopt.h"
 // On GNU/Linux
 #include <stdio.h>
 

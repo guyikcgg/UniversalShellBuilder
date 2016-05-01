@@ -1,4 +1,4 @@
-#include "optget.h"
+#include "getopt.h"
 
 /* Variables used by getopt */
 char *optarg  = NULL;
