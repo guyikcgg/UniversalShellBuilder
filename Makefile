@@ -1,21 +1,39 @@
 CC = gcc
 
-
 all: linux_examples
 
-linux_examples: linux_1
+linux_examples: linux_1 linux_2
+
+debug1:
+	gcc -ggdb -o example/linux_1/example getopt.h getopt.c example/linux_1/commands.c example/linux_1/main.c
 
 #LINUX 1
-EXAMPLE=./example/linux_1/
-OBJECTS=optget.o $(EXAMPLE)/commands.o
-HEADERS=optget.h $(EXAMPLE)/commands.h
-$(EXAMPLE)/optget.o: optget.h optget.c
-	$(CC) -c optget.c
-commands.o: $(EXAMPLE)/commands.h $(EXAMPLE)/commands.c
-	$(CC) -c $(EXAMPLE)/commands.c
-linux_1: $(HEADERS) $(OBJECTS) $(EXAMPLE)/main.c
-	$(CC) -o $(EXAMPLE)/example $^
+EXAMPLE1=./example/linux_1/
+OBJECTS1=getopt.o $(EXAMPLE1)/commands.o
+HEADERS1=getopt.h $(EXAMPLE1)/commands.h
+
+commands.o: $(EXAMPLE1)/commands.h $(EXAMPLE1)/commands.c
+	$(CC) -c $(EXAMPLE1)/commands.c
+
+linux_1: $(HEADERS1) $(OBJECTS1) $(EXAMPLE1)/main.c
+	$(CC) -o $(EXAMPLE1)/example $^
+
+#LINUX 2
+EXAMPLE2=./example/linux_2/
+OBJECTS2=getopt.o $(EXAMPLE2)/commands.o
+HEADERS2=getopt.h $(EXAMPLE2)/commands.h
+
+commands.o: $(EXAMPLE2)/commands.h $(EXAMPLE2)/commands.c
+	$(CC) -c $(EXAMPLE2)/commands.c
+
+linux_2: $(HEADERS2) $(OBJECTS2) $(EXAMPLE2)/main.c
+	$(CC) -o $(EXAMPLE2)/example $^
 
 
+#GENERAL
+getopt.o: getopt.h getopt.c
+	$(CC) -c getopt.c
+
+OBJECTS = getopt.o $(EXAMPLE1)/commands.o $(EXAMPLE2)/commands.o
 clean:
 	rm $(OBJECTS)
