@@ -5,6 +5,8 @@
 
 /* INCLUDES */
 #include "optget.h"
+// On GNU/Linux
+#include <stdio.h>
 
 /* COMMAND STRUCTURES */
 #define COMMAND(NAME)  { #NAME, cmd_ ## NAME }
@@ -27,6 +29,14 @@ int cmd_help        (int argc, char *argv[]);
 int cmd_not_valid   (int argc, char *argv[]);
 
 /* SOME DEFINITIONS */
-// Sugested definitions:
 #define NL "\n"
 typedef char bool;
+// Sugested definitions:
+#ifndef TRUE
+    #define TRUE  1
+#endif
+#ifndef FALSE
+    #define FALSE 0
+#endif
+// On GNU/Linux
+#define gprint(str) printf("%s", str)

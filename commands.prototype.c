@@ -41,6 +41,17 @@ struct _command commands[] =
 *     GENERAL FUNCTIONS     *
 *      (do not touch)       *
 ****************************/
+/* strcmp: compares two strings */
+int strcmp(const char *str1, const char *str2) {
+    int d;
+
+    while (d = *str1++ - *str2++ == 0) {
+        if (*str1 -1 == '\0') return 0;
+    }
+
+    return d;
+}
+
 /* separate_args: splits a message in arguments separated by ' ' */
 unsigned separate_args(char *msg, char *argv[]) {
     unsigned argc = 0;
@@ -61,7 +72,7 @@ void execute_command(int argc, char* argv[]) {
 	/* Identify the command */
 	if (strlen(argv[0]))
 	for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
-        //printf("%s" NL, commands[command].name);
+        //gprint("%s" NL, commands[command].name);
 		if (strcmp(commands[command].name, argv[0]) == 0) {
 			commands[command].function(argc, argv);
             return;
@@ -141,29 +152,32 @@ int cmd_example(int argc, char *argv[]) {
         case CMD_EXAMPLE_ERROR_NONE:
         	break;
         case CMD_EXAMPLE_ERROR_OPTIONS:
-        	printf("Error: the following arguments are not recognized as valid options ");
-    		while (optind < argc)
-    			printf("'%s' ", argv[optind++]);
-    		printf(NL);
+        	gprint("Error: the following arguments are not recognized as valid options ");
+    		while (optind < argc) {
+                gprint("'");
+                gprint(argv[optind++]);
+                gprint("' ");
+            }
+    		gprint(NL);
     		opt.help = TRUE;
     		break;
         case CMD_EXAMPLE_ERROR_GETOPT_DEFAULT:
-        	printf("Error: 'getopt' reached default case (it returned character code 0%o ??\r\n", c);
-        	printf(NL);
+        	gprint("Error: 'getopt' reached default case");
+        	gprint(NL);
         	opt.help = TRUE;
         	break;
         default:
-        	printf("Error: an unknown error occurred");
-        	printf(NL);
+        	gprint("Error: an unknown error occurred");
+        	gprint(NL);
         	opt.help = TRUE;
         }
 
     /* Print help for this command */
 	if(opt.help) {
-		printf("example - the prototype for any command");
-        printf(NL NL);
-		printf("EXAMPLE [-h]");
-		printf(NL NL);
+		gprint("example - the prototype for any command");
+        gprint(NL NL);
+		gprint("EXAMPLE [-h]");
+		gprint(NL NL);
 	}
 
 	/* Exit the command */
@@ -188,14 +202,15 @@ int cmd_help(int argc, char *argv[]) {
 		execute_command(2, &argv[1]);
 	} else {
 		// Your system header here ->
-        printf("commands.prototype v0.1 - example code")
+        gprint("commands.prototype v0.1 - example code")
 
-		printf(NL NL "Available commands:" NL);
+		gprint(NL NL "Available commands:" NL);
         for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
-    		printf("%s" NL, commands[command].name);
+            gprint(commands[command].name);
+    		gprint(NL);
     	}
 
-		printf(NL "To get additional information about any command, type 'help [command]'" NL);
+		gprint(NL "To get additional information about any command, type 'help [command]'" NL);
 	}
 
     return 0;
@@ -203,6 +218,8 @@ int cmd_help(int argc, char *argv[]) {
 
 /* cmd_not_valid: print a not-valid message and then print help */
 int cmd_not_valid(int argc, char *argv[]) {
-    printf("'%s' is not recognized as a valid command." NL NL, argv[0]);
+    gprint("'");
+    gprint(argv[0]);
+    gprint("' is not recognized as a valid command" NL NL);
     cmd_help(0, argv);
 }
