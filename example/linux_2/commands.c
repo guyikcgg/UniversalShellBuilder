@@ -30,6 +30,7 @@
 struct _command commands[] = {
     // Your commands here ->
     COMMAND(example),
+    COMMAND(example2),
     // Always keep 'help' and 'not_valid' commands
     COMMAND (help),
     COMMAND (not_valid)
@@ -86,7 +87,8 @@ void execute_command(int argc, char* argv[]) {
 
 
 /*************************###sisale */
-int _argc; char *_argv[];
+int _argc; char **_argv;
+/*
 int read_option(const char *opt, bool *flag, void *option) {
     int c;
     bool help = FALSE;
@@ -101,10 +103,31 @@ int read_option(const char *opt, bool *flag, void *option) {
             *flag = TRUE;
             option = optarg;
             break;
+        }
     }
 
     clean_getopt();
     return *flag;
+}
+*/
+
+struct _option {
+    bool available;
+    char *value;
+};
+struct _option opt(const char *opt) {
+    int c;
+    struct _option result = {FALSE, NULL};
+
+    while ((c = getopt(_argc, _argv, opt))!=-1) {
+        if (c == *opt) {
+            result.available = TRUE;
+            result.value = optarg;
+        }
+    }
+
+    clean_getopt();
+    return result;
 }
 
 /***************************************/
@@ -221,6 +244,24 @@ int cmd_example(int argc, char *argv[]) {
 	clean_getopt();
 	return error;
 }
+
+int cmd_example2(int argc, char *argv[]) {
+    _argc = argc;
+    _argv = argv;
+
+    if (opt("h").available) {
+        gprint("example - the prototype for any command");
+        gprint(NL NL);
+		gprint("EXAMPLE [-h]");
+		gprint(NL NL);
+    } else if (opt("t:").available) {
+        gprint(opt("t:").value);
+        gprint(NL);
+    }
+    return 0;
+
+}
+
 
 
 /****************************

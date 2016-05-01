@@ -23,6 +23,7 @@ void execute_command(int argc, char* argv[]);
 /* COMMANDS */
 // Your commands here ->
 int cmd_example     (int argc, char *argv[]);
+int cmd_example2    (int argc, char *argv[]);
 
 /* SPECIAL COMMANDS */
 int cmd_help        (int argc, char *argv[]);
