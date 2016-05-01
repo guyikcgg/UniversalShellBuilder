@@ -45,8 +45,9 @@ struct _command commands[] =
 int strcmp(const char *str1, const char *str2) {
     int d;
 
-    while (d = *str1++ - *str2++ == 0) {
-        if (*str1 -1 == '\0') return 0;
+    for (d=*str1-*str2; d==0; d=*str1-*str2) {
+        if (*str1 == '\0') return 0;
+        str1++; str2++;
     }
 
     return d;
@@ -132,12 +133,12 @@ int cmd_example(int argc, char *argv[]) {
 
     /* Check the number of options */
     if (optind < min_optind || optind > max_optind) {
-        error = CMD_CALCULATOR_ERROR_OPTIONS;
+        error = CMD_EXAMPLE_ERROR_OPTIONS;
     }
 
     /* Check the number of arguments */
     if (argc - optind < min_u_argc || argc - optind > max_u_argc) {
-        error = CMD_CALCULATOR_ERROR_OPTIONS;
+        error = CMD_EXAMPLE_ERROR_OPTIONS;
     }
 
     /* Act according to the options */
@@ -193,7 +194,7 @@ int cmd_example(int argc, char *argv[]) {
 
 /* cmd_help: print general help, or help about a specified command */
 int cmd_help(int argc, char *argv[]) {
-	const char help_c[] = "-h";
+	char help_c[] = "-h";
     unsigned command;
 
 	if (argc>1 && strcmp(argv[1], "help")) {
@@ -202,7 +203,7 @@ int cmd_help(int argc, char *argv[]) {
 		execute_command(2, &argv[1]);
 	} else {
 		// Your system header here ->
-        gprint("commands.prototype v0.1 - example code")
+        gprint("commands.prototype v0.1 - example code");
 
 		gprint(NL NL "Available commands:" NL);
         for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
