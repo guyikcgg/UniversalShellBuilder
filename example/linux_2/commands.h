@@ -2,8 +2,6 @@
 *
 *
 *******************************************************************************/
-//oops (not here)
-#define NL "\n"
 
 /* INCLUDES */
 #include "../../getopt.h"
@@ -54,6 +52,9 @@ int cmd_not_valid   (int argc, char *argv[]);
 /* SOME DEFINITIONS */
 #define NL "\n"
 typedef char bool;
+// Under construction...
+#define MAX_MSG_LENGTH  200      //For the receiving frame... (circular buffer)
+#define MAX_N_OPTIONS   MAX_MSG_LENGTH/3 // real maximum, because '-' + [opt] + ' ' = 3
 // Sugested definitions:
 #ifndef TRUE
     #define TRUE  1
