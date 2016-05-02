@@ -130,6 +130,24 @@ struct _option opt(const char *opt) {
     return result;
 }
 
+int get_options(int argc, char *argv[]) {
+    int c;
+
+    _argc = argc;
+    _argv = argv;
+
+    // Only when CMD_AUTO_HELP defined!!
+    while ((c = getopt(_argc, _argv, "h"))!=-1) {
+        if (c == 'h') {
+            return 1;   // error! (or help)
+        }
+    }
+
+    // Maybe it would be interesting to print the first not recognized command also..
+
+    return 0; //no errors, everything ok
+}
+
 /***************************************/
 
 
@@ -246,19 +264,20 @@ int cmd_example(int argc, char *argv[]) {
 }
 
 int cmd_example2(int argc, char *argv[]) {
-    _argc = argc;
-    _argv = argv;
+    if (get_options(argc, argv) != 0) {
+        gprint(cmd_example2_help);  // This should be done by get_options
+                                    // Otherwise, it does not make sense to
+                                    // have a CMD_AUTO_HELP option...
+                                    // Should use the struct tooooo
+        return 1;
+    } else {
 
-    if (opt("h").available) {
-        gprint("example - the prototype for any command");
-        gprint(NL NL);
-		gprint("EXAMPLE [-h]");
-		gprint(NL NL);
-    } else if (opt("t:").available) {
-        gprint(opt("t:").value);
-        gprint(NL);
+        if (opt("t:").available) {
+            gprint(opt("t:").value);
+            gprint(NL);
+        }
+        return 0;
     }
-    return 0;
 
 }
 
