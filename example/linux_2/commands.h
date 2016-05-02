@@ -39,17 +39,16 @@ int cmd_example     (int argc, char *argv[]);
 int cmd_example2    (int argc, char *argv[]);
 #ifdef CMD_AUTO_HELP
     extern const char cmd_example_help[];
-
+    extern const char cmd_example2_help[];
 #endif
 
 /* SPECIAL COMMANDS */
 int cmd_help        (int argc, char *argv[]);
 int cmd_not_valid   (int argc, char *argv[]);
 #ifdef CMD_AUTO_HELP
-    //const char cmd_help_help[] = "";
-    //const char cmd_not_valid_help[] = "";
+    extern const char cmd_help_help[];
+    extern const char cmd_not_valid_help[];
 #endif
-
 
 
 /* SOME DEFINITIONS */

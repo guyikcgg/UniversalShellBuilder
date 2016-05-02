@@ -25,17 +25,7 @@
 
 
 
-const char cmd_example_help[] = "foh!" NL NL;
-const char cmd_example2_help[] =   "example2 - the prototype for any command"
-                        NL
-                        NL
-                        "EXAMPLE [-h]"
-                        NL
-                        NL;
-#ifdef CMD_AUTO_HELP
-    const char cmd_help_help[] = "";
-    const char cmd_not_valid_help[] = "";
-#endif
+
 
 /*****************************
 *          COMMANDS          *
@@ -48,6 +38,24 @@ struct _command commands[] = {
     COMMAND (help),
     COMMAND (not_valid)
 };
+
+
+/*****************************
+*        COMMAND HELP        *
+*****************************/
+const char cmd_example_help[] =
+                "foh!" NL
+                NL;
+const char cmd_example2_help[] =
+                "example2 - the prototype for any command" NL
+                NL
+                "EXAMPLE [-h]" NL
+                NL;
+#ifdef CMD_AUTO_HELP
+    const char cmd_help_help[] = "";
+    const char cmd_not_valid_help[] = "";
+#endif
+
 
 /****************************
 *     GENERAL FUNCTIONS     *
