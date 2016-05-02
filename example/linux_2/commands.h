@@ -16,7 +16,7 @@
     struct _command {
         char *name;
         int (*function) (int argc, char *argv[]);
-        char *help;
+        const char *help;
     };
     #define COMMAND(NAME)  { #NAME, cmd_ ## NAME, cmd_ ## NAME ## _help }
 #else
@@ -38,13 +38,8 @@ void execute_command(int argc, char* argv[]);
 int cmd_example     (int argc, char *argv[]);
 int cmd_example2    (int argc, char *argv[]);
 #ifdef CMD_AUTO_HELP
-    //const char cmd_example_help[] = "foh!" NL NL;
-    //char cmd_example2_help[] =   "example2 - the prototype for any command"
-    //                        NL
-    //                        NL
-    //                        "EXAMPLE [-h]"
-    //                        NL
-    //                        NL;
+    extern const char cmd_example_help[];
+
 #endif
 
 /* SPECIAL COMMANDS */
