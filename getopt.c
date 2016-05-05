@@ -62,8 +62,14 @@ int getopt(int argc, char *argv[], const char *optstring) {
 		if (argv[argn][ap] == optstring[i]) {
 			if (ap==1) optind++;		//
 			ap++;
-			if (optstring[i+1]==':') {
-				optarg = argv[++argn];	// This option has an argument!
+			if (optstring[i+1]==':') {   // This option has an argument!
+                // Check whether the argument was received
+				if (argn<argc-1) {
+                    optarg = argv[++argn];
+                } else {
+                    optarg = NULL;
+                    return -1;          // No argument! Return error
+                }
 				argn++;					// Skip this argument and
 				ap = 0;					// prepare to analyze the following one
 				if (optarg) optind++;
