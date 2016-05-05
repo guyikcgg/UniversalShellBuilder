@@ -8,6 +8,8 @@
 // On GNU/Linux
 #include <stdio.h>
 
+#define COMMANDS_DEBUG 1
+
 /* COMMAND STRUCTURES */
 #define CMD_AUTO_HELP
 #ifdef CMD_AUTO_HELP
@@ -62,8 +64,9 @@ int cmd_not_valid   (int argc, char *argv[]);
 #define NL "\n"
 typedef char bool;
 // Under construction...
-#define MAX_MSG_LENGTH  200      //For the receiving frame... (circular buffer)
-#define MAX_N_OPTIONS   MAX_MSG_LENGTH/3 // real maximum, because '-' + [opt] + ' ' = 3
+#define MAX_MSG_LENGTH          200              //For the receiving frame... (circular buffer)
+#define MAX_N_OPTIONS           MAX_MSG_LENGTH/3 // real maximum, because '-' + [opt] + ' ' = 3
+#define MAX_N_OPTIONS_WITH_ARGS MAX_N_OPTIONS/2
 // Sugested definitions:
 #ifndef TRUE
     #define TRUE  1

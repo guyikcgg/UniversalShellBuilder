@@ -79,6 +79,15 @@ int strcmp(const char *str1, const char *str2) {
     return d;
 }
 
+/* my_strlen: returns the length of a string */
+unsigned my_strlen(const char *str) {
+    unsigned l;
+
+    for (l=0; str[l]; l++);
+
+    return l;
+}
+
 /* separate_args: splits a message in arguments separated by ' ' */
 unsigned separate_args(char *msg, char *argv[]) {
     unsigned argc = 0;
@@ -186,25 +195,84 @@ union _option opt(const char opt) {
 }
 */
 
-int get_options(int argc, char *argv[], char *options) {
+// ### dirty!!
+//#define REASONABLE_MAX (10+5+1) //10 options max, 5 options getting arguments + help
+int get_options(int argc, char *argv[], const char *options) {
     unsigned command_number = command_name(argv[0]);
     int c;
+    char h_options[MAX_N_OPTIONS + MAX_N_OPTIONS_WITH_ARGS + 2];
+    unsigned i;
 
     _argc = argc;
     _argv = argv;
 
-    // Only when CMD_AUTO_HELP defined!!
-    while ((c = getopt(_argc, _argv, "h"))!=-1) {
-        if (c == 'h') {
-            // Print help and return
-            gprint(commands[command_number].help);
+    #if (COMMANDS_DEBUG) //###
+        for (i=0; options[i]; i++);
+        if (i > MAX_N_OPTIONS+MAX_N_OPTIONS_WITH_ARGS) {
+            gprint("ERROR: '");
+            gprint(options);
+            gprint("' is too long.");
+            gprint("Check 'MAX_N_OPTIONS' and 'MAX_N_OPTIONS_WITH_ARGS'" NL);
+            gprint("    Error from get_options() in commands.c" NL "Called from ");
+            gprint(argv[0]);
+            gprint(NL);
             return 1;
         }
+    #endif
+
+    // Copy options into a new string to have 'help' option
+    h_options[0] = 'h';
+    for (i=0; options[i]; i++) h_options[i+1] = options[i];
+    h_options[i+1] = '\0';
+
+    clean_getopt();
+
+    // Only when CMD_AUTO_HELP defined!!
+    while ((c = getopt(_argc, _argv, h_options)) != GETOPT_DONE) {
+        if (c == 'h') {  // Print help and return
+            gprint(commands[command_number].help);
+            return 1;   // HELP
+        }
+        // Handle errors
+        if (c == GETOPT_NO_ARG) {
+            gprint("Error: expected argument after '-");
+            h_options[0] = optopt; h_options[1] = 0;
+            gprint(h_options);
+            gprint("'" NL);
+            gprint(commands[command_number].help);
+            return c;
+        }
+        if (c == GETOPT_INVALID ) {
+            gprint("Error: '-");
+            h_options[0] = optopt; h_options[1] = 0;
+            gprint(h_options);
+            gprint("' is not recognized as a valid option" NL);
+            gprint(commands[command_number].help);
+            return c;
+        }
+        // Everything ok
+        printf (" %c ", c);
+        for (i=0; options[i]; i++) {  // Look for valid options
+            printf("i=%d" NL, i);
+            if (c == options[i]) {    // Save the option
+                got_options[optind].value = TRUE;
+                if (optarg != NULL) got_options[optind].content = optarg;
+                break;
+            }
+        }
+
     }
 
-    // Maybe it would be interesting to print the first not recognized command also..
+    // ### USE ONCE PER FUNCTION!! (decide whether at the beggining or end)
+    clean_getopt();
 
-    return 0; //no errors, everything ok
+    // Check for errors
+    if (c != GETOPT_DONE) {
+    } else {
+        // No errors, everything ok
+        return 0;
+    }
+
 }
 
 /***************************************/
@@ -325,12 +393,13 @@ int cmd_example(int argc, char *argv[]) {
 int cmd_example2(int argc, char *argv[]) {
     int error;
 
-    if (error = get_options(argc, argv, "t:")) return error;
+    if (error = get_options(argc, argv, "t:a")) return error;
 
-    
+
     if (opt("t:").value) {
         gprint(opt("t:").content);
         gprint(NL);
+        printf("%d" NL, my_strlen(opt("t:").content));
     }
     return 0;
 
