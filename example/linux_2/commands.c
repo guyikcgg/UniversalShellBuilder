@@ -62,10 +62,20 @@ const char cmd_example2_help[] =
 *     GENERAL FUNCTIONS     *
 *      (do not touch)       *
 ****************************/
-/* strcmp: compares two strings */
+/* strcmp: compares two strings (returns something like 'str1 > str2') */
 int strcmp(const char *str1, const char *str2) {
     int d;
 
+    // Exception: NULL
+    if (str1==NULL && str2==NULL) {
+        return 0;
+    } else if (str1 == NULL) {
+        return +1;
+    } else if (str2 == NULL) {
+        return -1;
+    }
+
+    // Normal case
     for (d=*str1-*str2; d==0; d=*str1-*str2) {
         if (*str1 == '\0') return 0;
         str1++; str2++;
@@ -87,21 +97,28 @@ unsigned separate_args(char *msg, char *argv[]) {
 	return argc;
 }
 
+
+/* command_name: identify the command,
+        returns the number of the specified command name */
+unsigned command_name(char *name) {
+    unsigned number;
+
+    for (number = 0; strcmp(commands[number].name, "not_valid"); number++) {
+		if (strcmp(commands[number].name, name) == 0) {
+            return number;
+		}
+    }
+
+    return number;
+}
+
+
+
 /* execute_command: identifies the command from a list and executes it */
 void execute_command(int argc, char* argv[]) {
-	unsigned command;
+    unsigned command_number = command_name(argv[0]);
 
-	/* Identify the command */
-	if (*argv[0])
-	for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
-		if (strcmp(commands[command].name, argv[0]) == 0) {
-			commands[command].function(argc, argv);
-            return;
-		}
-	}
-
-    cmd_not_valid(argc, argv);
-    return;
+	commands[command_number].function(argc, argv);
 }
 
 
@@ -142,6 +159,7 @@ struct arg_info {
     unsigned n_arg; // = argc - number of recognized options
     unsigned n_opt; // = number of recognized options
 };   // could be useful to restrict number of options and arguments
+
 union _option opt(const char *opt) {
     int c;
     union _option result = {0};
@@ -156,7 +174,7 @@ union _option opt(const char *opt) {
     clean_getopt();
     return result;
 }
-/*
+/*/
 union _option opt(const char opt) {
     //possible_options    // global
     //got_options         // global
@@ -172,6 +190,7 @@ union _option opt(const char opt) {
     return 0;
 }
 */
+
 int get_options(int argc, char *argv[]) {
     int c;
 
