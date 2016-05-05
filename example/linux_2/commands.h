@@ -25,6 +25,8 @@
     #define COMMAND(NAME)  { #NAME, cmd_ ## NAME }
 #endif
 
+#define DEFAULT_COMMANDS()  COMMAND (help), COMMAND (not_valid)
+
 /* GOT OPTIONS */
 union _option {
     char value;

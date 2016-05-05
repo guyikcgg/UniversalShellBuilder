@@ -35,9 +35,8 @@ struct _command commands[] = {
     // Your commands here ->
     COMMAND(example),
     COMMAND(example2),
-    // Always keep 'help' and 'not_valid' commands
-    COMMAND (help),
-    COMMAND (not_valid)
+    // Always keep DEFAULT_COMMANDS
+    DEFAULT_COMMANDS()
 };
 
 
