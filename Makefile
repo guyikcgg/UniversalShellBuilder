@@ -1,6 +1,10 @@
 CC = gcc
 
 all: linux_examples
+	ctags -R --c-kinds=+p --fields=+iaS --extra=+q .
+
+run:
+	./example/linux_2/example $(ARGS)
 
 linux_examples: linux_1 linux_2
 
