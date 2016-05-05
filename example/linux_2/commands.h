@@ -19,9 +19,8 @@
 
     #define COMMAND(NAME)  { #NAME, cmd_ ## NAME, cmd_ ## NAME ## _help }
 
-    #define DEFAULT_COMMANDS_HELP \
-        const char cmd_help_help[] = ""; \
-        const char cmd_not_valid_help[] = "";
+    #define cmd_help_help NULL
+    #define cmd_not_valid_help NULL
 
 #else
     struct _command {
@@ -31,18 +30,16 @@
 
     #define COMMAND(NAME)  { #NAME, cmd_ ## NAME }
 
-    #define DEFAULT_COMMANDS_HELP ;
 #endif
 
 #define DEFAULT_COMMANDS()  COMMAND (help), COMMAND (not_valid)
+
 
 /* GOT OPTIONS */
 union _option {
     char value;
     char *content;
 };
-
-
 
 /* GENERAL FUNCTIONS */
 unsigned separate_args(char *msg, char *argv[]);
@@ -57,15 +54,9 @@ int cmd_example2    (int argc, char *argv[]);
     extern const char cmd_example2_help[];
 #endif
 
-/* SPECIAL COMMANDS */
+/* DEFAULT COMMANDS */
 int cmd_help        (int argc, char *argv[]);
 int cmd_not_valid   (int argc, char *argv[]);
-
-#ifdef CMD_AUTO_HELP
-    extern const char cmd_help_help[];
-    extern const char cmd_not_valid_help[];
-#endif
-
 
 /* SOME DEFINITIONS */
 #define NL "\n"

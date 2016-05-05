@@ -51,9 +51,6 @@ const char cmd_example2_help[] =
                 NL
                 "EXAMPLE [-h]" NL
                 NL;
-// Keep this line
-DEFAULT_COMMANDS_HELP
-
 
 
 /****************************
