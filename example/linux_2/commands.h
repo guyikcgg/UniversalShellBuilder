@@ -25,6 +25,12 @@
     #define COMMAND(NAME)  { #NAME, cmd_ ## NAME }
 #endif
 
+/* GOT OPTIONS */
+union _option {
+    char value;
+    char *content;
+};
+
 
 
 /* GENERAL FUNCTIONS */

@@ -22,6 +22,7 @@
 *   CONSTANTS DEFINITION    *
 ****************************/
 // Your definitions here ->
+// (or in commands.h better)
 
 
 
@@ -130,26 +131,47 @@ int read_option(const char *opt, bool *flag, void *option) {
     return *flag;
 }
 */
-
+/*
 struct _option {
     bool available;
     char *value;
 };
-struct _option opt(const char *opt) {
+*/
+union _option got_options[MAX_N_OPTIONS]; // Modify 'getopt' to fill in this array
+struct arg_info {
+    unsigned n_arg; // = argc - number of recognized options
+    unsigned n_opt; // = number of recognized options
+};   // could be useful to restrict number of options and arguments
+union _option opt(const char *opt) {
     int c;
-    struct _option result = {FALSE, NULL};
+    union _option result = {0};
 
     while ((c = getopt(_argc, _argv, opt))!=-1) {
         if (c == *opt) {
-            result.available = TRUE;
-            result.value = optarg;
+            result.value = TRUE;
+            if (optarg != NULL) result.content = optarg;
         }
     }
 
     clean_getopt();
     return result;
 }
+/*
+union _option opt(const char opt) {
+    //possible_options    // global
+    //got_options         // global
+    char *cp;           // char_ptr
+    union _option *op;  // option_ptr
 
+    for (cp=possible_options, op=got_options; *cp; cp++, op++) {
+        while (*cp = ':') cp++;
+        if (*cp = opt) return *op;
+    }
+
+    // Not found
+    return 0;
+}
+*/
 int get_options(int argc, char *argv[]) {
     int c;
 
@@ -292,8 +314,8 @@ int cmd_example2(int argc, char *argv[]) {
         return 1;
     } else {
 
-        if (opt("t:").available) {
-            gprint(opt("t:").value);
+        if (opt("t:").value) {
+            gprint(opt("t:").content);
             gprint(NL);
         }
         return 0;
