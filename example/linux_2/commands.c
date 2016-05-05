@@ -186,7 +186,8 @@ union _option opt(const char opt) {
 }
 */
 
-int get_options(int argc, char *argv[]) {
+int get_options(int argc, char *argv[], char *options) {
+    unsigned command_number = command_name(argv[0]);
     int c;
 
     _argc = argc;
@@ -195,7 +196,9 @@ int get_options(int argc, char *argv[]) {
     // Only when CMD_AUTO_HELP defined!!
     while ((c = getopt(_argc, _argv, "h"))!=-1) {
         if (c == 'h') {
-            return 1;   // error! (or help)
+            // Print help and return
+            gprint(commands[command_number].help);
+            return 1;
         }
     }
 
@@ -320,20 +323,17 @@ int cmd_example(int argc, char *argv[]) {
 }
 
 int cmd_example2(int argc, char *argv[]) {
-    if (get_options(argc, argv) != 0) {
-        gprint(cmd_example2_help);  // This should be done by get_options
-                                    // Otherwise, it does not make sense to
-                                    // have a CMD_AUTO_HELP option...
-                                    // Should use the struct tooooo
-        return 1;
-    } else {
+    int error;
 
-        if (opt("t:").value) {
-            gprint(opt("t:").content);
-            gprint(NL);
-        }
-        return 0;
+    if (error = get_options(argc, argv, "t:")) return error;
+
+    
+    if (opt("t:").value) {
+        gprint(opt("t:").content);
+        gprint(NL);
     }
+    return 0;
+
 
 }
 
