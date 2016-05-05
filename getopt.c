@@ -11,8 +11,11 @@ int noargc    =    0;   // non-option argument count
 int getopt(int argc, char *argv[], const char *optstring) {
 	static volatile unsigned argn = 1;
 	static volatile unsigned ap = 0;   // argument pointer
-	unsigned osl = strlen(optstring);  // option string length
+	unsigned osl;                      // option string length
 	char *auxptr;
+
+    // strlen
+    for (osl=0; optstring[osl]; osl++);
 
     // Every parameter checked?
     if (argn >= argc) {
@@ -31,7 +34,7 @@ int getopt(int argc, char *argv[], const char *optstring) {
 	if (!osl) return GETOPT_DONE;	// Everything is done
 
 	// Current parameter already checked?
-	if (ap > strlen(argv[argn])-1) /* if (!argv[argn][ap])*/{
+	if (!argv[argn][ap]) {
 		argn++;
 		ap = 0;
 	}
@@ -57,8 +60,10 @@ int getopt(int argc, char *argv[], const char *optstring) {
 		}
 	}
 
+    if (! ((noargc+optind)<argc)) return GETOPT_DONE;
+
 	// OK, we can start analyzing this bunch of options
-	unsigned i;
+	unsigned i;    //###
 	for (i=0; i<osl; i++) {		// Check if this character is a valid option
         optopt = (int) argv[argn][ap];
 		if (optstring[i] == optopt) {
