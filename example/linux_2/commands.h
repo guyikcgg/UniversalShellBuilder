@@ -16,13 +16,22 @@
         int (*function) (int argc, char *argv[]);
         const char *help;
     };
+
     #define COMMAND(NAME)  { #NAME, cmd_ ## NAME, cmd_ ## NAME ## _help }
+
+    #define DEFAULT_COMMANDS_HELP \
+        const char cmd_help_help[] = ""; \
+        const char cmd_not_valid_help[] = "";
+
 #else
     struct _command {
         char *name;
         int (*function) (int argc, char *argv[]);
     };
+
     #define COMMAND(NAME)  { #NAME, cmd_ ## NAME }
+
+    #define DEFAULT_COMMANDS_HELP ;
 #endif
 
 #define DEFAULT_COMMANDS()  COMMAND (help), COMMAND (not_valid)
@@ -51,6 +60,7 @@ int cmd_example2    (int argc, char *argv[]);
 /* SPECIAL COMMANDS */
 int cmd_help        (int argc, char *argv[]);
 int cmd_not_valid   (int argc, char *argv[]);
+
 #ifdef CMD_AUTO_HELP
     extern const char cmd_help_help[];
     extern const char cmd_not_valid_help[];

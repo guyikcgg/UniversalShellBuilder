@@ -51,10 +51,9 @@ const char cmd_example2_help[] =
                 NL
                 "EXAMPLE [-h]" NL
                 NL;
-#ifdef CMD_AUTO_HELP
-    const char cmd_help_help[] = "";
-    const char cmd_not_valid_help[] = "";
-#endif
+// Keep this line
+DEFAULT_COMMANDS_HELP
+
 
 
 /****************************
