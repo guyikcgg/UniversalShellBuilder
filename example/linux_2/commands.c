@@ -163,12 +163,15 @@ struct _option {
     char *value;
 };
 */
+
+char *possible_options;
 union _option got_options[MAX_N_OPTIONS]; // Modify 'getopt' to fill in this array
 struct arg_info {
     unsigned n_arg; // = argc - number of recognized options
     unsigned n_opt; // = number of recognized options
 };   // could be useful to restrict number of options and arguments
 
+/*/
 union _option opt(const char *opt) {
     int c;
     union _option result = {0};
@@ -188,26 +191,28 @@ union _option opt(const char opt) {
     //possible_options    // global
     //got_options         // global
     char *cp;           // char_ptr
-    union _option *op;  // option_ptr
+    union _option aux_o, *op;  // option_ptr
 
     for (cp=possible_options, op=got_options; *cp; cp++, op++) {
-        while (*cp = ':') cp++;
-        if (*cp = opt) return *op;
+        while (*cp == ':') cp++;
+        if (*cp == opt) return *op;
     }
 
+    aux_o.value = FALSE;
     // Not found
-    return 0;
+    return aux_o;
 }
-*/
+/**/
 
 // ### dirty!!
 //#define REASONABLE_MAX (10+5+1) //10 options max, 5 options getting arguments + help
-int get_options(int argc, char *argv[], const char *options) {
+int get_options(int argc, char *argv[], char *options) {
     unsigned command_number = command_name(argv[0]);
     int c;
     char h_options[MAX_N_OPTIONS + MAX_N_OPTIONS_WITH_ARGS + 2];
-    unsigned i;
+    unsigned i, j;
 
+    possible_options = options;
     _argc = argc;
     _argv = argv;
 
@@ -256,14 +261,15 @@ int get_options(int argc, char *argv[], const char *options) {
             return c;
         }
         // Everything ok
-        printf (" %c ", c);
+//        printf (" %c ", c);
         for (i=0; options[i]; i++) {  // Look for valid options
-            printf("i=%d" NL, i);
             if (c == options[i]) {    // Save the option
-                got_options[optind].value = TRUE;
-                if (optarg != NULL) got_options[optind].content = optarg;
+//                printf("j=%d" NL, j);
+                got_options[j].value = TRUE;
+                if (optarg != NULL) got_options[j].content = optarg;
                 break;
             }
+            if (options[i] != ':') j++;
         }
 
     }
@@ -398,13 +404,13 @@ int cmd_example(int argc, char *argv[]) {
 int cmd_example2(int argc, char *argv[]) {
     int error;
 
-    if (error = get_options(argc, argv, "t:a")) return error;
+    if (error = get_options(argc, argv, "t:ab:c")) return error;
 
 
-    if (opt("t:").value) {
-        gprint(opt("t:").content);
+    if (opt('t').value) {
+        gprint(opt('t').content);
         gprint(NL);
-        printf("%d" NL, my_strlen(opt("t:").content));
+        printf("%d" NL, my_strlen(opt('t').content));
     }
 
     // Get non-option arguments easily!!!!
