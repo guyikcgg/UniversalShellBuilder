@@ -21,33 +21,7 @@
 /****************************
 *   CONSTANTS DEFINITION    *
 ****************************/
-// Your definitions here ->
-// (or in commands.h better)
 
-
-
-
-
-/*****************************
-*          COMMANDS          *
-*****************************/
-struct _command commands[] = {
-    // Your commands here ->
-    COMMAND(example),
-    COMMAND(example2),
-};
-
-/*****************************
-*        COMMAND HELP        *
-*****************************/
-const char cmd_example_help[] =
-                "foh!" NL
-                NL;
-const char cmd_example2_help[] =
-                "example2 - the prototype for any command" NL
-                NL
-                "EXAMPLE [-h]" NL
-                NL;
 
 
 /****************************
@@ -124,8 +98,6 @@ unsigned command_name(char *name) {
     return number;
 }
 
-
-
 /* execute_command: identifies the command from a list and executes it */
 void execute_command(int argc, char* argv[]) {
     unsigned command_number = command_name(argv[0]);
@@ -168,16 +140,16 @@ union _option opt(const char opt) {
 /* get_options: get every option received in the arguments and register them
         in 'options'. On error, print help */
 int get_options(int argc, char *argv[], char *options) {
-    unsigned command_number = command_name(argv[0]);
-    int c;
     char h_options[MAX_N_OPTIONS + MAX_N_OPTIONS_WITH_ARGS + 2];
     unsigned i, j;
+    int c;
 
+    // Register globals
     possible_options = options;
     _argc = argc;
     _argv = argv;
 
-    #if (COMMANDS_DEBUG) //###
+    #if (COMMANDS_DEBUG)
         for (i=0; options[i]; i++);
         if (i > MAX_N_OPTIONS+MAX_N_OPTIONS_WITH_ARGS) {
             gprint("ERROR: '");
@@ -192,13 +164,19 @@ int get_options(int argc, char *argv[], char *options) {
     #endif
 
     // Copy options into a new string to have 'help' option
+    #ifdef CMD_AUTO_HELP
+        unsigned command_number = command_name(argv[0]);
+        j = 1;
+    #else
+        j = 0;
+    #endif
     h_options[0] = 'h';
-    for (i=0; options[i]; i++) h_options[i+1] = options[i];
-    h_options[i+1] = '\0';
+    for (i=0; options[i]; i++) h_options[i+j] = options[i];
+    h_options[i+j] = '\0';
 
     clean_getopt();
 
-    // Clean the options
+    // Clean got_options
     for (i=0, j=0; options[i]; i++) {
         got_options[j].value = FALSE;
         if (options[i] != ':') j++;
@@ -242,160 +220,15 @@ int get_options(int argc, char *argv[], char *options) {
 
     }
 
-    // ### USE ONCE PER FUNCTION!! (decide whether at the beggining or end)
-    clean_getopt();
-
-    // Check for errors
-    if (c != GETOPT_DONE) {
-    } else {
-        // No errors, everything ok
-        return 0;
-    }
-
-}
-
-/******************************************************************************/
-
-
-
-/****************************
-*          COMMANDS         *
-*    (your commands here)   *
-****************************/
-/* cmd_example: a example command */
-int cmd_example(int argc, char *argv[]) {
-    /* Variables declaration */
-    // Variables to handle options
-	int c;
-    struct {
-        // Your option flags here ->
-        bool text;
-		bool help;
-	} opt = { FALSE };
-    char *text = NULL;
-
-    // Expected number of options and non-option arguments
-    const unsigned min_optind   = 0;
-    const unsigned max_optind   = 5;
-    const unsigned min_u_argc   = 0;
-    const unsigned max_u_argc   = 0;
-
-    // Variables to handle errors
-    enum {
-		CMD_EXAMPLE_ERROR_NONE = 0,
-		CMD_EXAMPLE_ERROR_OPTIONS,
-		CMD_EXAMPLE_ERROR_GETOPT_DEFAULT,
-        // Your error codes here ->
-	} error = CMD_EXAMPLE_ERROR_NONE;
-
-    // Other variables
-    unsigned i;
-
-    /* Get every option */
-    while ((c = getopt(argc, argv, "ht:" /* <- Your options here */))!=-1 && opt.help==FALSE) {
-        switch (c) {
-        case '?':
-        case 'h':
-            opt.help = TRUE;
-            break;
-        // Set your option flags here ->
-        case 't':
-            opt.text = TRUE;
-            text = optarg;
-            break;
-
-        default:
-        	error = CMD_EXAMPLE_ERROR_GETOPT_DEFAULT;
-        	break;
-        }
-    }
-
-    /* Check the number of options */
-    if (optind < min_optind || optind > max_optind) {
-        error = CMD_EXAMPLE_ERROR_OPTIONS;
-    }
-
-    /* Check the number of arguments */
-    if (argc - optind < min_u_argc || argc - optind > max_u_argc) {
-        error = CMD_EXAMPLE_ERROR_OPTIONS;
-    }
-
-    /* Act according to the options */
-    if (!opt.help && !error) {
-        //-------------------------//
-        //   Your main code here   //
-        //-------------------------//
-        if (opt.text) {
-            gprint(text);
-            gprint(NL);
-        }
-    }
-
-    /* Handle errors */
-    switch (error) {
-        case CMD_EXAMPLE_ERROR_NONE:
-        	break;
-        case CMD_EXAMPLE_ERROR_OPTIONS:
-        	gprint("Error: the following arguments are not recognized as valid options ");
-    		while (optind < argc) {
-                gprint("'");
-                gprint(argv[optind++]);
-                gprint("' ");
-            }
-    		gprint(NL);
-    		opt.help = TRUE;
-    		break;
-        case CMD_EXAMPLE_ERROR_GETOPT_DEFAULT:
-        	gprint("Error: 'getopt' reached default case");
-        	gprint(NL);
-        	opt.help = TRUE;
-        	break;
-        default:
-        	gprint("Error: an unknown error occurred");
-        	gprint(NL);
-        	opt.help = TRUE;
-        }
-
-    /* Print help for this command */
-	if(opt.help) {
-		gprint("example - the prototype for any command");
-        gprint(NL NL);
-		gprint("EXAMPLE [-h]");
-		gprint(NL NL);
-	}
-
-	/* Exit the command */
-	clean_getopt();
-	return error;
-}
-
-int cmd_example2(int argc, char *argv[]) {
-    int error;
-
-    if (error = get_options(argc, argv, "t:ab:c")) return error;
-
-
-    if (opt('t').value)
-        printf("t=%s -> %d" NL, opt('t').content, my_strlen(opt('t').content));
-    if (opt('a').value)
-        printf("a" NL);
-    if (opt('b').value)
-        printf("b=%s -> %d" NL, opt('b').content, my_strlen(opt('b').content));
-    if (opt('c').value)
-        printf("c" NL);
-
-
-    // Get non-option arguments easily!!!!
+    // No errors, everything ok
     return 0;
 
-
 }
-
 
 
 /****************************
 *      SPECIAL COMMANDS     *
-*    (do not remove them)   *
+*    (rename functions!!)   *
 ****************************/
 
 /* cmd_help: print general help, or help about a specified command */

@@ -3,6 +3,9 @@
 *
 *******************************************************************************/
 
+#ifndef COMMANDS_H
+#define COMMANDS_H
+
 /* INCLUDES */
 #include "../../getopt.h"
 // On GNU/Linux
@@ -31,7 +34,7 @@
 
 #endif
 
-#define N_COMMANDS sizeof(commands) / sizeof(commands[0])
+//#define N_COMMANDS sizeof(commands) / sizeof(commands[0])
 
 /* GOT OPTIONS */
 union _option {
@@ -42,15 +45,13 @@ union _option {
 /* GENERAL FUNCTIONS */
 unsigned separate_args(char *msg, char *argv[]);
 void execute_command(int argc, char* argv[]);
+union _option opt(const char opt);
+int get_options(int argc, char *argv[], char *options);
+unsigned command_name(char *name);
 
 /* COMMANDS */
-// Your commands here ->
-int cmd_example     (int argc, char *argv[]);
-int cmd_example2    (int argc, char *argv[]);
-#ifdef CMD_AUTO_HELP
-    extern const char cmd_example_help[];
-    extern const char cmd_example2_help[];
-#endif
+extern const struct _command commands[];
+extern const unsigned N_COMMANDS;
 
 /* DEFAULT COMMANDS */
 int cmd_help        (char *command);
@@ -70,5 +71,9 @@ typedef char bool;
 #ifndef FALSE
     #define FALSE 0
 #endif
+
+/* GPRINT */
 // On GNU/Linux
 #define gprint(str) printf("%s", str)
+
+#endif
