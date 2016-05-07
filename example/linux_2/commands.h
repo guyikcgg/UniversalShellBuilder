@@ -35,7 +35,7 @@
 #endif
 
 #define DEFAULT_COMMANDS()  COMMAND (help), COMMAND (not_valid)
-
+#define N_COMMANDS sizeof(commands) / sizeof(commands[0])
 
 /* GOT OPTIONS */
 union _option {

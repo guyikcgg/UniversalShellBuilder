@@ -35,10 +35,12 @@ struct _command commands[] = {
     // Your commands here ->
     COMMAND(example),
     COMMAND(example2),
-    // Always keep DEFAULT_COMMANDS
-    DEFAULT_COMMANDS()
 };
 
+// Always keep DEFAULT_COMMANDS
+struct _command default_commands[] = {
+    DEFAULT_COMMANDS()
+};
 
 /*****************************
 *        COMMAND HELP        *
@@ -107,7 +109,7 @@ unsigned separate_args(char *msg, char *argv[]) {
 unsigned command_name(char *name) {
     unsigned number;
 
-    for (number = 0; strcmp(commands[number].name, "not_valid"); number++) {
+    for (number=0; number<N_COMMANDS; number++) {
 		if (strcmp(commands[number].name, name) == 0) {
             return number;
 		}
@@ -122,7 +124,16 @@ unsigned command_name(char *name) {
 void execute_command(int argc, char* argv[]) {
     unsigned command_number = command_name(argv[0]);
 
-	commands[command_number].function(argc, argv);
+    if (command_number < N_COMMANDS) {
+        commands[command_number].function(argc, argv);
+    } else {
+        if (strcmp(argv[0], "help")) {
+            command_number = 0;
+        } else {
+            command_number = 1;
+        }
+        default_commands[command_number].function(argc, argv);
+    }
 }
 
 
@@ -401,6 +412,8 @@ int cmd_example2(int argc, char *argv[]) {
         gprint(NL);
         printf("%d" NL, my_strlen(opt("t:").content));
     }
+
+    // Get non-option arguments easily!!!!
     return 0;
 
 
@@ -427,7 +440,7 @@ int cmd_help(int argc, char *argv[]) {
         gprint("commands.prototype v0.1 - example code");
 
 		gprint(NL NL "Available commands:" NL);
-        for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
+        for (command = 0; command<N_COMMANDS; command++) {
             gprint(commands[command].name);
     		gprint(NL);
     	}
