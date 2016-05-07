@@ -21,9 +21,6 @@
 
     #define COMMAND(NAME)  { #NAME, cmd_ ## NAME, cmd_ ## NAME ## _help }
 
-    #define cmd_help_help NULL
-    #define cmd_not_valid_help NULL
-
 #else
     struct _command {
         char *name;
@@ -34,7 +31,6 @@
 
 #endif
 
-#define DEFAULT_COMMANDS()  COMMAND (help), COMMAND (not_valid)
 #define N_COMMANDS sizeof(commands) / sizeof(commands[0])
 
 /* GOT OPTIONS */
@@ -57,8 +53,8 @@ int cmd_example2    (int argc, char *argv[]);
 #endif
 
 /* DEFAULT COMMANDS */
-int cmd_help        (int argc, char *argv[]);
-int cmd_not_valid   (int argc, char *argv[]);
+int cmd_help        (char *command);
+int cmd_not_valid   (char *command);
 
 /* SOME DEFINITIONS */
 #define NL "\n"

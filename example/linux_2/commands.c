@@ -37,11 +37,6 @@ struct _command commands[] = {
     COMMAND(example2),
 };
 
-// Always keep DEFAULT_COMMANDS
-struct _command default_commands[] = {
-    DEFAULT_COMMANDS()
-};
-
 /*****************************
 *        COMMAND HELP        *
 *****************************/
@@ -127,12 +122,11 @@ void execute_command(int argc, char* argv[]) {
     if (command_number < N_COMMANDS) {
         commands[command_number].function(argc, argv);
     } else {
-        if (strcmp(argv[0], "help")) {
-            command_number = 0;
+        if (!strcmp(argv[0], "help")) {
+            cmd_help(argv[1]);
         } else {
-            command_number = 1;
+            cmd_not_valid(argv[0]);
         }
-        default_commands[command_number].function(argc, argv);
     }
 }
 
@@ -427,21 +421,23 @@ int cmd_example2(int argc, char *argv[]) {
 ****************************/
 
 /* cmd_help: print general help, or help about a specified command */
-int cmd_help(int argc, char *argv[]) {
-	char help_c[] = "-h";
-    unsigned command;
+int cmd_help(char *command) {
+    unsigned number;
 
-	if (argc>1 && strcmp(argv[1], "help")) {
-		// If asked for help about a command, execute 'command -h'
-		argv[2] = help_c;
-		execute_command(2, &argv[1]);
+	if (command && strcmp(command, "help")) {
+		// If asked for help about a command, show the help
+        if (number=command_name(command) < N_COMMANDS) {
+            gprint(commands[number].help);
+        } else {
+            cmd_not_valid(command);
+        }
 	} else {
 		// Your system header here ->
         gprint("commands.prototype v0.1 - example code");
 
 		gprint(NL NL "Available commands:" NL);
-        for (command = 0; command<N_COMMANDS; command++) {
-            gprint(commands[command].name);
+        for (number = 0; number<N_COMMANDS; number++) {
+            gprint(commands[number].name);
     		gprint(NL);
     	}
 
@@ -452,9 +448,9 @@ int cmd_help(int argc, char *argv[]) {
 }
 
 /* cmd_not_valid: print a not-valid message and then print help */
-int cmd_not_valid(int argc, char *argv[]) {
+int cmd_not_valid(char *command) {
     gprint("'");
-    gprint(argv[0]);
+    gprint(command);
     gprint("' is not recognized as a valid command" NL NL);
-    cmd_help(0, argv);
+    cmd_help(NULL);
 }
