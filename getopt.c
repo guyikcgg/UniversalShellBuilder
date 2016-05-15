@@ -60,7 +60,7 @@ int getopt(int argc, char *argv[], const char *optstring) {
 		}
 	}
 
-    if (! ((noargc+optind)<argc)) return GETOPT_DONE;
+    if ((noargc+optind)>argc) return GETOPT_DONE;
 
 	// OK, we can start analyzing this bunch of options
 	unsigned i;    //###
