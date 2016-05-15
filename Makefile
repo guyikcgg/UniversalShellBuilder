@@ -13,7 +13,11 @@ linux_examples: linux_1 linux_2
 debug1:
 	gcc -ggdb -o example/linux_1/example getopt.h getopt.c example/linux_1/commands.c example/linux_1/main.c
 debug2:
-	gcc -ggdb -o example/linux_2/example getopt.h getopt.c example/linux_2/commands.c example/linux_2/main.c
+	gcc -ggdb -o example/linux_2/example \
+	getopt.h getopt.c \
+	example/linux_2/commands.c \
+	example/linux_2/main.c \
+	example/linux_2/my_commands.c
 
 #LINUX 1
 EXAMPLE1=./example/linux_1/

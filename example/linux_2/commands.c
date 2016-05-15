@@ -107,12 +107,12 @@ void execute_command(int argc, char* argv[]) {
     } else {
         if (!strcmp(argv[0], "help")) {
             if (argc > 1) {
-                cmd_help(argv[1]);
+                default_cmd_help(argv[1]);
             } else {
-                cmd_help(NULL);
+                default_cmd_help(NULL);
             }
         } else {
-            cmd_not_valid(argv[0]);
+            default_cmd_not_valid(argv[0]);
         }
     }
 }
@@ -136,7 +136,7 @@ union _option opt_union(const char opt) {
     }
 
     // Not found (this should never happen)
-    #if (COMMANDS_DEBUG)
+    #if (CMD_DEBUG)
         char arg_opt[2] = {0};
         arg_opt[0] = opt;
         gprint("opt could not recognize option '");
@@ -161,7 +161,7 @@ int get_options(int argc, char *argv[], char *options) {
     _argc = argc;
     _argv = argv;
 
-    #if (COMMANDS_DEBUG)
+    #if (CMD_DEBUG)
         for (i=0; options[i]; i++);
         if (i > MAX_N_OPTIONS+MAX_N_OPTIONS_WITH_ARGS) {
             gprint("ERROR: '");
@@ -176,7 +176,7 @@ int get_options(int argc, char *argv[], char *options) {
     #endif
 
     // Copy options into a new string to have 'help' option
-    #ifdef CMD_AUTO_HELP
+    #ifdef CMD_AUTOHELP
         unsigned command_number = command_name(argv[0]);
         j = 1;
     #else
@@ -197,7 +197,7 @@ int get_options(int argc, char *argv[], char *options) {
     // Get every option
     while ((c = getopt(_argc, _argv, h_options)) != GETOPT_DONE) {
         // Print help
-        #ifdef CMD_AUTO_HELP
+        #ifdef CMD_AUTOHELP
             if (c == 'h') {  // Print help and return
                 gprint(commands[command_number].help);
                 return 1;   // HELP
@@ -205,11 +205,11 @@ int get_options(int argc, char *argv[], char *options) {
         #endif
         // Handle errors
         if (c == GETOPT_NO_ARG) {
-            gprint("Error: expected argument after '-");
             h_options[0] = optopt; h_options[1] = 0;
+            gprint("Error: expected argument after '-");
             gprint(h_options);
             gprint("'" NL);
-			#ifdef CMD_AUTO_HELP
+			#ifdef CMD_AUTOHELP
             gprint(commands[command_number].help);
 			#endif
             return c;
@@ -218,8 +218,8 @@ int get_options(int argc, char *argv[], char *options) {
             gprint("Error: '-");
             h_options[0] = optopt; h_options[1] = 0;
             gprint(h_options);
-            gprint("' is not recognized as a valid option" NL);
-			#ifdef CMD_AUTO_HELP
+            gprint("' " CMD_STR_NOT_VALID_OPTION);
+			#ifdef CMD_AUTOHELP
 			gprint(commands[command_number].help);
 			#endif
             return c;
@@ -244,46 +244,45 @@ int get_options(int argc, char *argv[], char *options) {
 
 /****************************
 *      SPECIAL COMMANDS     *
-*    (rename functions!!)   *
 ****************************/
 
-/* cmd_help: print general help, or help about a specified command */
-int cmd_help(char *command) {
+/* default_cmd_help: print general help, or help about a specified command */
+int default_cmd_help(char *command) {
     unsigned number;
 
 	if (command && strcmp(command, "help")) {
 		// If asked for help about a command, show the help
-		#ifdef CMD_AUTO_HELP
+		#ifdef CMD_AUTOHELP
         if ((number=command_name(command)) < N_COMMANDS) {
             gprint(commands[number].help);
         } else
         #endif
         {
-            cmd_not_valid(command);
+            default_cmd_not_valid(command);
         }
     } else {
 		// Your system header here ->
-        gprint("commands.prototype v0.1 - example code");
+        gprint(CMD_STR_PROJECT_TITLE);
 
-		gprint(NL NL "Available commands:" NL);
+		gprint(CMD_STR_AVAILABLE_COMMANDS);
         for (number = 0; number<N_COMMANDS; number++) {
             gprint(commands[number].name);
     		gprint(NL);
     	}
-		#ifdef CMD_AUTO_HELP
-		gprint(NL "To get additional information about any command, type 'help [command]'" NL);
+		#ifdef CMD_AUTOHELP
+		gprint(NL CMD_STR_HELP_COMMAND);
 		#endif
 	}
 
     return 0;
 }
 
-/* cmd_not_valid: print a not-valid message and then print help */
-int cmd_not_valid(char *command) {
-    gprint("'");
+/* default_cmd_not_valid: print a not-valid message and then print help */
+int default_cmd_not_valid(char *command) {
+    gprint("Error: '");
     gprint(command);
-    gprint("' is not recognized as a valid command" NL NL);
-    cmd_help(NULL);
+    gprint("' " CMD_STR_NOT_VALID_COMMAND);
+    default_cmd_help(NULL);
 
     return 0;
 }

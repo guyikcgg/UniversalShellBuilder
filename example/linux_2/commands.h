@@ -8,18 +8,17 @@
 
 /* INCLUDES */
 #include "../../getopt.h"
-// On GNU/Linux
-#include <stdio.h>
+#include "my_commands.h"
 
-#define COMMANDS_DEBUG 1
+//#define CMD_DEBUG
 
 /* AUTOHELP */
-#ifndef CMD_NO_AUTO_HELP
-#define CMD_AUTO_HELP
+#ifndef CMD_NO_AUTOHELP
+#define CMD_AUTOHELP
 #endif
 
 /* COMMAND STRUCTURES */
-#ifdef CMD_AUTO_HELP
+#ifdef CMD_AUTOHELP
     struct _command {
         char *name;
         int (*function) (int argc, char *argv[]);
@@ -60,16 +59,17 @@ extern const struct _command commands[];
 extern const unsigned N_COMMANDS;
 
 /* DEFAULT COMMANDS */
-int cmd_help        (char *command);
-int cmd_not_valid   (char *command);
+int default_cmd_help        (char *command);
+int default_cmd_not_valid   (char *command);
 
 /* SOME DEFINITIONS */
-#define NL "\n"
-typedef char bool;
 // Under construction...
 #define MAX_MSG_LENGTH          200              //For the receiving frame... (circular buffer)
 #define MAX_N_OPTIONS           MAX_MSG_LENGTH/3 // real maximum, because '-' + [opt] + ' ' = 3
 #define MAX_N_OPTIONS_WITH_ARGS MAX_N_OPTIONS/2
+#ifndef NL
+#define NL "\n"
+#endif
 // Sugested definitions:
 #ifndef TRUE
     #define TRUE  1
@@ -79,7 +79,27 @@ typedef char bool;
 #endif
 
 /* GPRINT */
+#ifndef gprint
 // On GNU/Linux
+#include <stdio.h>
 #define gprint(str) printf("%s", str)
+#endif
+
+/* STRINGS */
+#ifndef CMD_STR_PROJECT_TITLE
+#define CMD_STR_PROJECT_TITLE "UniversalCommandBuilder project" NL NL
+#endif
+#ifndef CMD_STR_NOT_VALID_COMMAND
+#define CMD_STR_NOT_VALID_COMMAND "is not a valid command" NL NL
+#endif
+#ifndef CMD_STR_HELP_COMMAND
+#define CMD_STR_HELP_COMMAND "Type 'help [command]' for additional help." NL
+#endif
+#ifndef CMD_STR_AVAILABLE_COMMANDS
+#define CMD_STR_AVAILABLE_COMMANDS "Available commands:" NL
+#endif
+#ifndef CMD_STR_NOT_VALID_OPTION
+#define CMD_STR_NOT_VALID_OPTION "is not a valid option" NL
+#endif
 
 #endif
