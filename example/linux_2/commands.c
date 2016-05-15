@@ -197,7 +197,9 @@ int get_options(int argc, char *argv[], char *options) {
             h_options[0] = optopt; h_options[1] = 0;
             gprint(h_options);
             gprint("'" NL);
+			#ifdef CMD_AUTO_HELP
             gprint(commands[command_number].help);
+			#endif
             return c;
         }
         if (c == GETOPT_INVALID ) {
@@ -205,7 +207,9 @@ int get_options(int argc, char *argv[], char *options) {
             h_options[0] = optopt; h_options[1] = 0;
             gprint(h_options);
             gprint("' is not recognized as a valid option" NL);
-            gprint(commands[command_number].help);
+			#ifdef CMD_AUTO_HELP
+			gprint(commands[command_number].help);
+			#endif
             return c;
         }
         // Everything ok, save option
@@ -237,9 +241,12 @@ int cmd_help(char *command) {
 
 	if (command && strcmp(command, "help")) {
 		// If asked for help about a command, show the help
-        if (number=command_name(command) < N_COMMANDS) {
-            gprint(commands[number].help);
-        } else {
+		#ifdef CMD_AUTO_HELP
+        if (number=command_name(command) < N_COMMANDS) {	
+			gprint(commands[number].help);
+        } else
+		#endif
+		{
             cmd_not_valid(command);
         }
 	} else {
@@ -251,8 +258,9 @@ int cmd_help(char *command) {
             gprint(commands[number].name);
     		gprint(NL);
     	}
-
+		#ifdef CMD_AUTO_HELP
 		gprint(NL "To get additional information about any command, type 'help [command]'" NL);
+		#endif
 	}
 
     return 0;

@@ -13,8 +13,12 @@
 
 #define COMMANDS_DEBUG 1
 
-/* COMMAND STRUCTURES */
+/* AUTOHELP */
+#ifndef CMD_NO_AUTO_HELP
 #define CMD_AUTO_HELP
+#endif
+
+/* COMMAND STRUCTURES */
 #ifdef CMD_AUTO_HELP
     struct _command {
         char *name;
