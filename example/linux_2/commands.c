@@ -21,36 +21,53 @@
 /****************************
 *   CONSTANTS DEFINITION    *
 ****************************/
-// Your definitions here ->
 
-
-/*****************************
-*          COMMANDS          *
-*****************************/
-struct _command commands[] =
-{
-    // Your commands here ->
-    COMMAND(example),
-    // Always keep 'help' and 'not_valid' commands
-    COMMAND (help),
-    COMMAND (not_valid)
-};
 
 
 /****************************
 *     GENERAL FUNCTIONS     *
 *      (do not touch)       *
 ****************************/
-/* strcmp: compares two strings */
+
+// Global variables (only in the scope of this file)
+int _argc; char **_argv;
+char *possible_options;
+union _option got_options[MAX_N_OPTIONS];
+struct arg_info {
+    unsigned n_arg; // = argc - number of recognized options
+    unsigned n_opt; // = number of recognized options
+};   // could be useful to restrict number of options and arguments
+
+
+/* strcmp: compares two strings (returns something like 'str1 > str2') */
 int strcmp(const char *str1, const char *str2) {
     int d;
 
+    // Exception: NULL
+    if (str1==NULL && str2==NULL) {
+        return 0;
+    } else if (str1 == NULL) {
+        return +1;
+    } else if (str2 == NULL) {
+        return -1;
+    }
+
+    // Normal case
     for (d=*str1-*str2; d==0; d=*str1-*str2) {
         if (*str1 == '\0') return 0;
         str1++; str2++;
     }
 
     return d;
+}
+
+/* my_strlen: returns the length of a string */
+unsigned my_strlen(const char *str) {
+    unsigned l;
+
+    for (l=0; str[l]; l++);
+
+    return l;
 }
 
 /* separate_args: splits a message in arguments separated by ' ' */
@@ -66,161 +83,207 @@ unsigned separate_args(char *msg, char *argv[]) {
 	return argc;
 }
 
-/* execute_command: identifies the command from a list and executes it */
-void execute_command(int argc, char* argv[]) {
-	unsigned command;
 
-	/* Identify the command */
-	if (strlen(argv[0]))
-	for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
-        //gprint("%s" NL, commands[command].name);
-		if (strcmp(commands[command].name, argv[0]) == 0) {
-			commands[command].function(argc, argv);
-            return;
+/* command_name: identify the command,
+        returns the number of the specified command name */
+unsigned command_name(char *name) {
+    unsigned number;
+
+    for (number=0; number<N_COMMANDS; number++) {
+		if (strcmp(commands[number].name, name) == 0) {
+            return number;
 		}
-	}
+    }
 
-    cmd_not_valid(argc, argv);
-    return;
+    return number;
 }
 
+/* execute_command: identifies the command from a list and executes it */
+void execute_command(int argc, char* argv[]) {
+    unsigned command_number = command_name(argv[0]);
 
-/****************************
-*          COMMANDS         *
-*    (your commands here)   *
-****************************/
-/* cmd_example: a example command */
-int cmd_example(int argc, char *argv[]) {
-    /* Variables declaration */
-    // Variables to handle options
-	int c;
-    struct {
-        // Your option flags here ->
-		bool help;
-	} opt = { FALSE };
-
-    // Expected number of options and non-option arguments
-    const unsigned min_optind   = 0;
-    const unsigned max_optind   = 1;
-    const unsigned min_u_argc   = 0;
-    const unsigned max_u_argc   = 0;
-
-    // Variables to handle errors
-    enum {
-		CMD_EXAMPLE_ERROR_NONE = 0,
-		CMD_EXAMPLE_ERROR_OPTIONS,
-		CMD_EXAMPLE_ERROR_GETOPT_DEFAULT,
-        // Your error codes here ->
-	} error = CMD_EXAMPLE_ERROR_NONE;
-
-    // Other variables
-    unsigned i;
-
-    /* Get every option */
-    while ((c = getopt(argc, argv, "h" /* <- Your options here */))!=-1 && opt.help==FALSE) {
-        switch (c) {
-        case '?':
-        case 'h':
-            opt.help = TRUE;
-            break;
-        // Set your option flags here ->
-
-        default:
-        	error = CMD_EXAMPLE_ERROR_GETOPT_DEFAULT;
-        	break;
-        }
-    }
-
-    /* Check the number of options */
-    if (optind < min_optind || optind > max_optind) {
-        error = CMD_EXAMPLE_ERROR_OPTIONS;
-    }
-
-    /* Check the number of arguments */
-    if (argc - optind < min_u_argc || argc - optind > max_u_argc) {
-        error = CMD_EXAMPLE_ERROR_OPTIONS;
-    }
-
-    /* Act according to the options */
-    if (!opt.help && !error) {
-        //-------------------------//
-        //   Your main code here   //
-        //-------------------------//
-    }
-
-    /* Handle errors */
-    switch (error) {
-        case CMD_EXAMPLE_ERROR_NONE:
-        	break;
-        case CMD_EXAMPLE_ERROR_OPTIONS:
-        	gprint("Error: the following arguments are not recognized as valid options ");
-    		while (optind < argc) {
-                gprint("'");
-                gprint(argv[optind++]);
-                gprint("' ");
+    if (command_number < N_COMMANDS) {
+        commands[command_number].function(argc, argv);
+    } else {
+        if (!strcmp(argv[0], "help")) {
+            if (argc > 1) {
+                cmd_help(argv[1]);
+            } else {
+                cmd_help(NULL);
             }
-    		gprint(NL);
-    		opt.help = TRUE;
-    		break;
-        case CMD_EXAMPLE_ERROR_GETOPT_DEFAULT:
-        	gprint("Error: 'getopt' reached default case");
-        	gprint(NL);
-        	opt.help = TRUE;
-        	break;
-        default:
-        	gprint("Error: an unknown error occurred");
-        	gprint(NL);
-        	opt.help = TRUE;
+        } else {
+            cmd_not_valid(argv[0]);
+        }
+    }
+}
+
+/* opt: check if the option was received in the arguments */
+char opt(const char opt) {
+	return opt_union(opt).value;
+}
+
+char *opt_content(const char opt) {
+	return opt_union(opt).content;
+}
+
+union _option opt_union(const char opt) {
+    char *char_ptr;
+    union _option aux_opt, *opt_ptr;
+
+    for (char_ptr=possible_options, opt_ptr=got_options; *char_ptr; char_ptr++, opt_ptr++) {
+        while (*char_ptr == ':') char_ptr++;
+        if (*char_ptr == opt) return *opt_ptr;
+    }
+
+    // Not found (this should never happen)
+    #if (COMMANDS_DEBUG)
+        char arg_opt[2] = {0};
+        arg_opt[0] = opt;
+        gprint("opt could not recognize option '");
+        gprint(arg_opt);
+        gprint("'" NL "is it in '");
+        gprint(possible_options);
+        gprint("'?" NL);
+    #endif
+    aux_opt.value = FALSE;
+    return aux_opt;
+}
+
+/* get_options: get every option received in the arguments and register them
+        in 'options'. On error, print help */
+int get_options(int argc, char *argv[], char *options) {
+    char h_options[MAX_N_OPTIONS + MAX_N_OPTIONS_WITH_ARGS + 2];
+    unsigned i, j;
+    int c;
+
+    // Register globals
+    possible_options = options;
+    _argc = argc;
+    _argv = argv;
+
+    #if (COMMANDS_DEBUG)
+        for (i=0; options[i]; i++);
+        if (i > MAX_N_OPTIONS+MAX_N_OPTIONS_WITH_ARGS) {
+            gprint("ERROR: '");
+            gprint(options);
+            gprint("' is too long.");
+            gprint("Check 'MAX_N_OPTIONS' and 'MAX_N_OPTIONS_WITH_ARGS'" NL);
+            gprint("    Error from get_options() in commands.c" NL "Called from ");
+            gprint(argv[0]);
+            gprint(NL);
+            return 1;
+        }
+    #endif
+
+    // Copy options into a new string to have 'help' option
+    #ifdef CMD_AUTO_HELP
+        unsigned command_number = command_name(argv[0]);
+        j = 1;
+    #else
+        j = 0;
+    #endif
+    h_options[0] = 'h';
+    for (i=0; options[i]; i++) h_options[i+j] = options[i];
+    h_options[i+j] = '\0';
+
+    clean_getopt();
+
+    // Clean got_options
+    for (i=0, j=0; options[i]; i++) {
+        got_options[j].value = FALSE;
+        if (options[i] != ':') j++;
+    }
+
+    // Get every option
+    while ((c = getopt(_argc, _argv, h_options)) != GETOPT_DONE) {
+        // Print help
+        #ifdef CMD_AUTO_HELP
+            if (c == 'h') {  // Print help and return
+                gprint(commands[command_number].help);
+                return 1;   // HELP
+            }
+        #endif
+        // Handle errors
+        if (c == GETOPT_NO_ARG) {
+            gprint("Error: expected argument after '-");
+            h_options[0] = optopt; h_options[1] = 0;
+            gprint(h_options);
+            gprint("'" NL);
+			#ifdef CMD_AUTO_HELP
+            gprint(commands[command_number].help);
+			#endif
+            return c;
+        }
+        if (c == GETOPT_INVALID ) {
+            gprint("Error: '-");
+            h_options[0] = optopt; h_options[1] = 0;
+            gprint(h_options);
+            gprint("' is not recognized as a valid option" NL);
+			#ifdef CMD_AUTO_HELP
+			gprint(commands[command_number].help);
+			#endif
+            return c;
+        }
+        // Everything ok, save option
+        for (i=0, j=0; options[i]; i++) {  // Look for valid options
+            if (c == options[i]) {    // Save the option
+                got_options[j].value = TRUE;
+                if (optarg != NULL) got_options[j].content = optarg;
+                break;
+            }
+            if (options[i] != ':') j++;
         }
 
-    /* Print help for this command */
-	if(opt.help) {
-		gprint("example - the prototype for any command");
-        gprint(NL NL);
-		gprint("EXAMPLE [-h]");
-		gprint(NL NL);
-	}
+    }
 
-	/* Exit the command */
-	clean_getopt();
-	return error;
+    // No errors, everything ok
+    return 0;
+
 }
 
 
 /****************************
 *      SPECIAL COMMANDS     *
-*    (do not remove them)   *
+*    (rename functions!!)   *
 ****************************/
 
 /* cmd_help: print general help, or help about a specified command */
-int cmd_help(int argc, char *argv[]) {
-	char help_c[] = "-h";
-    unsigned command;
+int cmd_help(char *command) {
+    unsigned number;
 
-	if (argc>1 && strcmp(argv[1], "help")) {
-		// If asked for help about a command, execute 'command -h'
-		argv[2] = help_c;
-		execute_command(2, &argv[1]);
-	} else {
+	if (command && strcmp(command, "help")) {
+		// If asked for help about a command, show the help
+		#ifdef CMD_AUTO_HELP
+        if ((number=command_name(command)) < N_COMMANDS) {
+            gprint(commands[number].help);
+        } else
+        #endif
+        {
+            cmd_not_valid(command);
+        }
+    } else {
 		// Your system header here ->
         gprint("commands.prototype v0.1 - example code");
 
 		gprint(NL NL "Available commands:" NL);
-        for (command = 0; strcmp(commands[command].name, "not_valid"); command++) {
-            gprint(commands[command].name);
+        for (number = 0; number<N_COMMANDS; number++) {
+            gprint(commands[number].name);
     		gprint(NL);
     	}
-
+		#ifdef CMD_AUTO_HELP
 		gprint(NL "To get additional information about any command, type 'help [command]'" NL);
+		#endif
 	}
 
     return 0;
 }
 
 /* cmd_not_valid: print a not-valid message and then print help */
-int cmd_not_valid(int argc, char *argv[]) {
+int cmd_not_valid(char *command) {
     gprint("'");
-    gprint(argv[0]);
+    gprint(command);
     gprint("' is not recognized as a valid command" NL NL);
-    cmd_help(0, argv);
+    cmd_help(NULL);
+
+    return 0;
 }

@@ -2,10 +2,18 @@ CC = gcc
 
 all: linux_examples
 
+tags:
+	ctags -R --c-kinds=+p --fields=+iaS --extra=+q .
+
+run:
+	./example/linux_2/example $(ARGS)
+
 linux_examples: linux_1 linux_2
 
 debug1:
 	gcc -ggdb -o example/linux_1/example getopt.h getopt.c example/linux_1/commands.c example/linux_1/main.c
+debug2:
+	gcc -ggdb -o example/linux_2/example getopt.h getopt.c example/linux_2/commands.c example/linux_2/main.c
 
 #LINUX 1
 EXAMPLE1=./example/linux_1/
