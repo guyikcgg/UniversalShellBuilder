@@ -118,7 +118,15 @@ void execute_command(int argc, char* argv[]) {
 }
 
 /* opt: check if the option was received in the arguments */
-union _option opt(const char opt) {
+char opt(const char opt) {
+	return opt_union(opt).value;
+}
+
+char *opt_content(const char opt) {
+	return opt_union(opt).content;
+}
+
+union _option opt_union(const char opt) {
     char *char_ptr;
     union _option aux_opt, *opt_ptr;
 

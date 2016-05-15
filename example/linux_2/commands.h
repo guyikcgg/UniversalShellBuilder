@@ -49,7 +49,9 @@ union _option {
 /* GENERAL FUNCTIONS */
 unsigned separate_args(char *msg, char *argv[]);
 void execute_command(int argc, char* argv[]);
-union _option opt(const char opt);
+char opt(const char opt);
+char *opt_content(const char opt);
+union _option opt_union(const char opt);
 int get_options(int argc, char *argv[], char *options);
 unsigned command_name(char *name);
 

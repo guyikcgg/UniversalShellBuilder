@@ -130,13 +130,13 @@ int cmd_example2(int argc, char *argv[]) {
     if (error = get_options(argc, argv, "t:ab:c")) return error;
 
 
-    if (opt('t').value)
-        printf("t=%s -> %d" NL, opt('t').content, my_strlen(opt('t').content));
-    if (opt('a').value)
+    if (opt('t'))
+        printf("t=%s -> %d" NL, opt_content('t'), my_strlen(opt_content('t')));
+    if (opt('a'))
         printf("a" NL);
-    if (opt('b').value)
-        printf("b=%s -> %d" NL, opt('b').content, my_strlen(opt('b').content));
-    if (opt('c').value)
+    if (opt('b'))
+        printf("b=%s -> %d" NL, opt_content('b'), my_strlen(opt_content('b')));
+    if (opt('c'))
         printf("c" NL);
 
 
