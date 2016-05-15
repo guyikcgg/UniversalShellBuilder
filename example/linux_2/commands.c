@@ -106,7 +106,11 @@ void execute_command(int argc, char* argv[]) {
         commands[command_number].function(argc, argv);
     } else {
         if (!strcmp(argv[0], "help")) {
-            cmd_help(argv[1]);
+            if (argc > 1) {
+                cmd_help(argv[1]);
+            } else {
+                cmd_help(NULL);
+            }
         } else {
             cmd_not_valid(argv[0]);
         }
@@ -242,14 +246,14 @@ int cmd_help(char *command) {
 	if (command && strcmp(command, "help")) {
 		// If asked for help about a command, show the help
 		#ifdef CMD_AUTO_HELP
-        if (number=command_name(command) < N_COMMANDS) {	
-			gprint(commands[number].help);
+        if ((number=command_name(command)) < N_COMMANDS) {
+            gprint(commands[number].help);
         } else
-		#endif
-		{
+        #endif
+        {
             cmd_not_valid(command);
         }
-	} else {
+    } else {
 		// Your system header here ->
         gprint("commands.prototype v0.1 - example code");
 
@@ -272,4 +276,6 @@ int cmd_not_valid(char *command) {
     gprint(command);
     gprint("' is not recognized as a valid command" NL NL);
     cmd_help(NULL);
+
+    return 0;
 }
