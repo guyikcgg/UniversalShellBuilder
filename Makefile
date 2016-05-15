@@ -1,6 +1,8 @@
 CC = gcc
 
 all: linux_examples
+
+tags:
 	ctags -R --c-kinds=+p --fields=+iaS --extra=+q .
 
 run:
