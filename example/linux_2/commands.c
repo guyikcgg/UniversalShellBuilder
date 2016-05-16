@@ -261,7 +261,7 @@ int default_cmd_help(char *command) {
     		gprint(NL);
     	}
 		#ifdef CMD_AUTOHELP
-		gprint(NL CMD_STR_HELP_COMMAND);
+		gprint(NL CMD_STR_ADDITIONAL_HELP);
 		#endif
 	}
 

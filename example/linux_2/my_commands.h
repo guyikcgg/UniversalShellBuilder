@@ -27,7 +27,7 @@
 ****************************/
 #define CMD_STR_PROJECT_TITLE "UniversalCodeBuilder Example for Linux v0.1" NL NL
 #define CMD_STR_NOT_VALID_COMMAND "is not recognized as a valid command" NL NL
-#define CMD_STR_HELP_COMMAND "Type 'help [command]' for additional help." NL
+#define CMD_STR_ADDITIONAL_HELP "Type 'help [command]' for additional help." NL "Press Ctrl+C to exit." NL
 #define CMD_STR_AVAILABLE_COMMANDS "Available commands:" NL
 #define CMD_STR_NOT_VALID_OPTION "is not recognized as a valid option" NL
 

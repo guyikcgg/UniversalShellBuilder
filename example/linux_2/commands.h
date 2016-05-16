@@ -98,8 +98,8 @@ int default_cmd_not_valid   (char *command);
 #ifndef CMD_STR_NOT_VALID_COMMAND
 #define CMD_STR_NOT_VALID_COMMAND "is not a valid command" NL NL
 #endif
-#ifndef CMD_STR_HELP_COMMAND
-#define CMD_STR_HELP_COMMAND "Type 'help [command]' for additional help." NL
+#ifndef CMD_STR_ADDITIONAL_HELP
+#define CMD_STR_ADDITIONAL_HELP "Type 'help [command]' for additional help." NL
 #endif
 #ifndef CMD_STR_AVAILABLE_COMMANDS
 #define CMD_STR_AVAILABLE_COMMANDS "Available commands:" NL
