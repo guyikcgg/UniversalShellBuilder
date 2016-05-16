@@ -12,10 +12,14 @@
 
 //#define CMD_DEBUG
 
-/* AUTOHELP */
+/* WORKING MODES */
 #ifndef CMD_NO_AUTOHELP
 #define CMD_AUTOHELP
 #endif
+#ifndef CMD_SAVE_MEMORY
+#define CMD_NO_SAVE_MEMORY
+#endif
+
 
 /* COMMAND STRUCTURES */
 #ifdef CMD_AUTOHELP
@@ -45,6 +49,13 @@ union _option {
     char *content;
 };
 
+/* ERROR CODES */
+enum _error_code {
+    CMD_ERROR_COMMAND_NOT_VALID,
+    CMD_ERROR_OPTION_NOT_VALID,
+    CMD_ERROR_OPTION_EXPECTS_ARG
+};
+
 /* GENERAL FUNCTIONS */
 unsigned separate_args(char *msg, char *argv[]);
 void execute_command(int argc, char* argv[]);
@@ -53,6 +64,7 @@ char *opt_content(const char opt);
 union _option opt_union(const char opt);
 int get_options(int argc, char *argv[], char *options);
 unsigned command_name(char *name);
+void default_cmd_error(enum _error_code error, char* arg);
 
 /* COMMANDS */
 extern const struct _command commands[];
@@ -107,5 +119,12 @@ int default_cmd_not_valid   (char *command);
 #ifndef CMD_STR_NOT_VALID_OPTION
 #define CMD_STR_NOT_VALID_OPTION "is not a valid option" NL
 #endif
+#ifndef CMD_STR_ARG_EXPECTED
+#define CMD_STR_ARG_EXPECTED "option expects an argument" NL
+#endif
+#ifndef CMD_STR_ERROR_WORD
+#define CMD_STR_ERROR_WORD "Error: "
+#endif
+
 
 #endif

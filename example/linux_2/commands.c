@@ -103,7 +103,7 @@ void execute_command(int argc, char* argv[]) {
                 default_cmd_help(NULL);
             }
         } else {
-            default_cmd_not_valid(argv[0]);
+            default_cmd_error(CMD_ERROR_COMMAND_NOT_VALID, argv[0]);
         }
     }
 }
@@ -166,9 +166,9 @@ int get_options(int argc, char *argv[], char *options) {
         }
     #endif
 
+    // TODO only if no 'h' in options
     // Copy options into a new string to have 'help' option
     #ifdef CMD_AUTOHELP
-        unsigned command_number = command_name(argv[0]);
         j = 1;
     #else
         j = 0;
@@ -190,29 +190,19 @@ int get_options(int argc, char *argv[], char *options) {
         // Print help
         #ifdef CMD_AUTOHELP
             if (c == 'h') {  // Print help and return
-                gprint(commands[command_number].help);
+                default_cmd_help(_argv[0]);
                 return 1;   // HELP
             }
         #endif
         // Handle errors
         if (c == GETOPT_NO_ARG) {
             h_options[0] = optopt; h_options[1] = 0;
-            gprint("Error: expected argument after '-");
-            gprint(h_options);
-            gprint("'" NL);
-			#ifdef CMD_AUTOHELP
-            gprint(commands[command_number].help);
-			#endif
+            default_cmd_error(CMD_ERROR_OPTION_EXPECTS_ARG, h_options);
             return c;
         }
         if (c == GETOPT_INVALID ) {
-            gprint("Error: '-");
             h_options[0] = optopt; h_options[1] = 0;
-            gprint(h_options);
-            gprint("' " CMD_STR_NOT_VALID_OPTION);
-			#ifdef CMD_AUTOHELP
-			gprint(commands[command_number].help);
-			#endif
+            default_cmd_error(CMD_ERROR_OPTION_NOT_VALID, h_options);
             return c;
         }
         // Everything ok, save option
@@ -249,7 +239,7 @@ int default_cmd_help(char *command) {
         } else
         #endif
         {
-            default_cmd_not_valid(command);
+            default_cmd_error(CMD_ERROR_COMMAND_NOT_VALID,command);
         }
     } else {
 		// Your system header here ->
@@ -268,12 +258,41 @@ int default_cmd_help(char *command) {
     return 0;
 }
 
-/* default_cmd_not_valid: print a not-valid message and then print help */
-int default_cmd_not_valid(char *command) {
-    gprint("Error: '");
-    gprint(command);
-    gprint("' " CMD_STR_NOT_VALID_COMMAND);
-    default_cmd_help(NULL);
+/* default_cmd_error: print error messages */
+void default_cmd_error(enum _error_code error, char* arg) {
+    #ifdef CMD_SAVE_MEMORY
+    char error_c[6] = {'E', 'r', 'r', ' ', '0' + (char) error, 0};
 
-    return 0;
+    gprint(error_c);
+    gprint(NL);
+
+    #else
+    char *command = NULL;
+
+    gprint(CMD_STR_ERROR_WORD);
+
+    switch (error) {
+    case CMD_ERROR_COMMAND_NOT_VALID:
+        gprint("'");
+        gprint(arg);
+        gprint("' " CMD_STR_NOT_VALID_COMMAND);
+        break;
+    case CMD_ERROR_OPTION_NOT_VALID:
+        gprint("'-");
+        gprint(arg);
+        gprint("' " CMD_STR_NOT_VALID_OPTION);
+        command = _argv[0];
+        break;
+    case CMD_ERROR_OPTION_EXPECTS_ARG:
+        gprint("'-");
+        gprint(arg);
+        gprint("' " CMD_STR_ARG_EXPECTED);
+        command = _argv[0];
+        break;
+    }
+
+    gprint(NL);
+    default_cmd_help(command);
+    #endif
+
 }
