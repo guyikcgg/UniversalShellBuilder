@@ -26,17 +26,14 @@
 
 /****************************
 *     GENERAL FUNCTIONS     *
-*      (do not touch)       *
 ****************************/
 
 // Global variables (only in the scope of this file)
-int _argc; char **_argv;
-char *possible_options;
-union _option got_options[CMD_MAX_N_OPTIONS];
-struct arg_info {
-    unsigned n_arg; // = argc - number of recognized options
-    unsigned n_opt; // = number of recognized options
-};   // could be useful to restrict number of options and arguments
+static int    _argc;
+static char** _argv;
+
+static char*         possible_options;
+static union _option got_options[CMD_MAX_N_OPTIONS];
 
 
 /* strcmp: compares two strings (returns something like 'str1 > str2') */
@@ -113,10 +110,13 @@ char opt(const char opt) {
 	return opt_union(opt).value;
 }
 
+/* opt_content: the content of an option expecting an argument */
 char *opt_content(const char opt) {
 	return opt_union(opt).content;
 }
 
+/* opt_union: check if the option was received in the arguments by looking
+        at 'got_options' and 'possible_options' */
 union _option opt_union(const char opt) {
     char *char_ptr;
     union _option aux_opt, *opt_ptr;
@@ -130,6 +130,7 @@ union _option opt_union(const char opt) {
     #if (CMD_DEBUG)
         char arg_opt[2] = {0};
         arg_opt[0] = opt;
+        gprint("ERROR: ");
         gprint("opt could not recognize option '");
         gprint(arg_opt);
         gprint("'" NL "is it in '");
