@@ -7,15 +7,20 @@
 #include <stdio.h>
 
 
-//extern const unsigned N_COMMANDS;
-//extern const struct _command commands[];
-
 /****************************
 *           GPRINT          *
 *    (the output for the    *
 *     library functions)    *
 ****************************/
 #define gprint(str) printf("%s", str)
+
+
+/****************************
+*   PARAMETERS DEFINITIONS  *
+****************************/
+#define CMD_MAX_N_OPTIONS           10
+#define CMD_MAX_N_OPTIONS_WITH_ARGS 5
+#define NL "\n"                     // New Line character(s)
 
 /****************************
 *     STRING DEFINITIONS    *

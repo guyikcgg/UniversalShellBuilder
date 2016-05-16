@@ -65,17 +65,23 @@ int default_cmd_not_valid   (char *command);
 /* SOME DEFINITIONS */
 // Under construction...
 #define MAX_MSG_LENGTH          200              //For the receiving frame... (circular buffer)
-#define MAX_N_OPTIONS           MAX_MSG_LENGTH/3 // real maximum, because '-' + [opt] + ' ' = 3
-#define MAX_N_OPTIONS_WITH_ARGS MAX_N_OPTIONS/2
+
+
+#ifndef CMD_MAX_N_OPTIONS
+#define CMD_MAX_N_OPTIONS           10
+#endif
+#ifndef CMD_MAX_N_OPTIONS_WITH_ARGS
+#define CMD_MAX_N_OPTIONS_WITH_ARGS 5
+#endif
 #ifndef NL
 #define NL "\n"
 #endif
 // Sugested definitions:
 #ifndef TRUE
-    #define TRUE  1
+#define TRUE  1
 #endif
 #ifndef FALSE
-    #define FALSE 0
+#define FALSE 0
 #endif
 
 /* GPRINT */

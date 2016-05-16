@@ -1,5 +1,6 @@
-#include "commands.h"
 #include "my_commands.h"
+#include "commands.h"
+#include <string.h>
 
 /****************************
 *          COMMANDS         *
@@ -13,11 +14,11 @@ int cmd_example(int argc, char *argv[]) {
 
 
     if (opt('t'))
-        printf("t=%s -> %d" NL, opt_content('t'), my_strlen(opt_content('t')));
+        printf("t=%s -> %d" NL, opt_content('t'), (int) strlen(opt_content('t')));
     if (opt('a'))
         printf("a" NL);
     if (opt('b'))
-        printf("b=%s -> %d" NL, opt_content('b'), my_strlen(opt_content('b')));
+        printf("b=%s -> %d" NL, opt_content('b'), (int) strlen(opt_content('b')));
     if (opt('c'))
         printf("c" NL);
 

@@ -32,7 +32,7 @@
 // Global variables (only in the scope of this file)
 int _argc; char **_argv;
 char *possible_options;
-union _option got_options[MAX_N_OPTIONS];
+union _option got_options[CMD_MAX_N_OPTIONS];
 struct arg_info {
     unsigned n_arg; // = argc - number of recognized options
     unsigned n_opt; // = number of recognized options
@@ -61,15 +61,6 @@ int strcmp(const char *str1, const char *str2) {
     return d;
 }
 
-/* my_strlen: returns the length of a string */
-unsigned my_strlen(const char *str) {
-    unsigned l;
-
-    for (l=0; str[l]; l++);
-
-    return l;
-}
-
 /* separate_args: splits a message in arguments separated by ' ' */
 unsigned separate_args(char *msg, char *argv[]) {
     unsigned argc = 0;
@@ -91,7 +82,7 @@ unsigned command_name(char *name) {
 
     for (number=0; number<N_COMMANDS; number++) {
 		if (strcmp(commands[number].name, name) == 0) {
-            return number;
+            break;
 		}
     }
 
@@ -152,7 +143,7 @@ union _option opt_union(const char opt) {
 /* get_options: get every option received in the arguments and register them
         in 'options'. On error, print help */
 int get_options(int argc, char *argv[], char *options) {
-    char h_options[MAX_N_OPTIONS + MAX_N_OPTIONS_WITH_ARGS + 2];
+    char h_options[CMD_MAX_N_OPTIONS + CMD_MAX_N_OPTIONS_WITH_ARGS + 2];
     unsigned i, j;
     int c;
 
@@ -163,11 +154,11 @@ int get_options(int argc, char *argv[], char *options) {
 
     #if (CMD_DEBUG)
         for (i=0; options[i]; i++);
-        if (i > MAX_N_OPTIONS+MAX_N_OPTIONS_WITH_ARGS) {
+        if (i > CMD_MAX_N_OPTIONS+CMD_MAX_N_OPTIONS_WITH_ARGS) {
             gprint("ERROR: '");
             gprint(options);
             gprint("' is too long.");
-            gprint("Check 'MAX_N_OPTIONS' and 'MAX_N_OPTIONS_WITH_ARGS'" NL);
+            gprint("Check 'CMD_MAX_N_OPTIONS' and 'CMD_MAX_N_OPTIONS_WITH_ARGS'" NL);
             gprint("    Error from get_options() in commands.c" NL "Called from ");
             gprint(argv[0]);
             gprint(NL);
