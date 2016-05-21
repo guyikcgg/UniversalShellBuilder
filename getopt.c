@@ -5,11 +5,11 @@ char *optarg  = NULL;
 int optind    =    1;
 int opterr    =    0;
 int optopt    =    0;
-int noargc    =    0;   // non-option argument count
+int noargc    =    0;       // non-option argument count
 
-static volatile unsigned argn = 1;
-static volatile unsigned ap = 0;   // argument pointer
-static unsigned ol = 0;                // option length
+static unsigned argn = 1;
+static unsigned ap = 0;     // argument pointer
+static unsigned ol = 0;     // option length
 
 
 /* getopt: gets the options from an argument list */
@@ -41,9 +41,9 @@ int getopt(int argc, char *argv[], const char *optstring) {
                 // and bring other arguments to this and next positions
     			auxptr = argv[argn];
     			for (i=argn; i<argc; i++) argv[i]=argv[i+1];
-    			argv[i-1] = auxptr; //i==argc? remove i here...
+    			argv[argc-1] = auxptr;
                 // Every argument analyzed?
-                if ((++noargc+optind)>argc) return GETOPT_DONE;
+                if ((++noargc+optind)>=argc) return GETOPT_DONE;
     		}
     	}
     }
@@ -56,7 +56,7 @@ int getopt(int argc, char *argv[], const char *optstring) {
 		if (optstring[i] == optopt) {
             switch (optstring[i+1]) {
             case ':':
-                if (!(argn<argc-1)) { //TODO optimize
+                if (argn>=argc-1) {
                     // No argument! Return error
                     optarg = NULL;
                     return GETOPT_NO_ARG;
@@ -92,5 +92,6 @@ void clean_getopt() {
     optopt = 0;
     noargc = 0;
     ap = 0;
+    ol = 0;
 	argn = 1;
 }
