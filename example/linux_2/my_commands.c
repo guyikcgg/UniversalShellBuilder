@@ -43,7 +43,7 @@ int cmd_example() {
         printf ("argv[%d] = %s\n", i, argv[i]);
     }
     */
-    //noarg = argc-optind+1;
+
     for (i=1; i<=noarg; i++)
         printf ("%d - %s\n", i, arg(i));
     return 0;

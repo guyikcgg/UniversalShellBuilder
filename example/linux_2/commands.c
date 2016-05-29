@@ -27,8 +27,8 @@
 *    (only in the scope     *
 *     of this file)         *
 ****************************/
-static int    _argc;
-static char** _argv;
+static int    s_argc;
+static char** s_argv;
 
 static char*         possible_options;
 static union _option got_options[CMD_MAX_N_OPTIONS];
@@ -99,20 +99,20 @@ unsigned command_name(char *name) {
 void execute_command(int argc, char* argv[]) {
     unsigned command_number = command_name(argv[0]);
 
-    _argc = argc;
-    _argv = argv;
+    s_argc = argc;
+    s_argv = argv;
 
     if (command_number < N_COMMANDS) {
         commands[command_number].function();
     } else {
-        if (!strcmp(argv[0], "help")) {
-            if (argc > 1) {
-                default_cmd_help(argv[1]);
+        if (!strcmp(s_argv[0], "help")) {
+            if (s_argc > 1) {
+                default_cmd_help(s_argv[1]);
             } else {
                 default_cmd_help(NULL);
             }
         } else {
-            default_cmd_error(CMD_ERROR_COMMAND_NOT_VALID, argv[0]);
+            default_cmd_error(CMD_ERROR_COMMAND_NOT_VALID, s_argv[0]);
         }
     }
 }
@@ -124,7 +124,7 @@ char *arg(const unsigned n) {
         return NULL;
     }
 
-    return _argv[optind+n-1];
+    return s_argv[optind+n-1];
 }
 
 /* opt: check if the option was received in the arguments */
@@ -207,11 +207,11 @@ int get_options(char *options) {
     }
 
     // Get every option
-    while ((c = getopt(_argc, _argv, h_options)) != GETOPT_DONE) {
+    while ((c = getopt(s_argc, s_argv, h_options)) != GETOPT_DONE) {
         // Print help
         #ifdef CMD_AUTOHELP
             if (c == 'h') {  // Print help and return
-                default_cmd_help(_argv[0]);
+                default_cmd_help(s_argv[0]);
                 return 1;   // HELP
             }
         #endif
@@ -239,7 +239,7 @@ int get_options(char *options) {
     }
 
     // No errors, everything ok
-    noarg = _argc-optind;
+    noarg = s_argc-optind;
 
     return 0;
 
@@ -304,13 +304,13 @@ void default_cmd_error(enum _error_code error, char* arg) {
         gprint("'-");
         gprint(arg);
         gprint("' " CMD_STR_NOT_VALID_OPTION);
-        command = _argv[0];
+        command = s_argv[0];
         break;
     case CMD_ERROR_OPTION_EXPECTS_ARG:
         gprint("'-");
         gprint(arg);
         gprint("' " CMD_STR_ARG_EXPECTED);
-        command = _argv[0];
+        command = s_argv[0];
         break;
     }
 
