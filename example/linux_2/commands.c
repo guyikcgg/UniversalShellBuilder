@@ -15,7 +15,6 @@
 *         INCLUDES          *
 ****************************/
 #include "commands.h"
-// Your includes here ->
 
 
 /****************************
@@ -23,18 +22,28 @@
 ****************************/
 
 
-
 /****************************
-*     GENERAL FUNCTIONS     *
+*     GLOBAL VARIABLES      *
+*    (only in the scope     *
+*     of this file)         *
 ****************************/
-
-// Global variables (only in the scope of this file)
 static int    _argc;
 static char** _argv;
 
 static char*         possible_options;
 static union _option got_options[CMD_MAX_N_OPTIONS];
 
+
+/****************************
+*     GLOBAL VARIABLES      *
+*     (used externally)     *
+****************************/
+int noarg;
+
+
+/****************************
+*     GENERAL FUNCTIONS     *
+****************************/
 
 /* strcmp: compares two strings (returns something like 'str1 > str2') */
 int strcmp(const char *str1, const char *str2) {
@@ -103,6 +112,12 @@ void execute_command(int argc, char* argv[]) {
             default_cmd_error(CMD_ERROR_COMMAND_NOT_VALID, argv[0]);
         }
     }
+}
+
+/* arg: return a pointer to the n-th non-option argument */
+char *arg(const unsigned n) {
+
+    return _argv[optind+n-1];
 }
 
 /* opt: check if the option was received in the arguments */
@@ -219,6 +234,8 @@ int get_options(int argc, char *argv[], char *options) {
     }
 
     // No errors, everything ok
+    noarg = argc-optind+1;
+
     return 0;
 
 }

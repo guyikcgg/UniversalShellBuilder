@@ -8,6 +8,7 @@
 
 /* INCLUDES */
 #include "../../getopt.h"
+//#include <getopt.h>
 #include "my_commands.h"
 
 //#define CMD_DEBUG
@@ -59,6 +60,7 @@ enum _error_code {
 /* GENERAL FUNCTIONS */
 unsigned separate_args(char *msg, char *argv[]);
 void execute_command(int argc, char* argv[]);
+char *arg(const unsigned n);
 char opt(const char opt);
 char *opt_content(const char opt);
 union _option opt_union(const char opt);
@@ -69,6 +71,9 @@ void default_cmd_error(enum _error_code error, char* arg);
 /* COMMANDS */
 extern const struct _command commands[];
 extern const unsigned N_COMMANDS;
+
+/* GLOBAL VARIABLES */
+extern int noarg;
 
 /* DEFAULT COMMANDS */
 int default_cmd_help        (char *command);
