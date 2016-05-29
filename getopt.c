@@ -25,7 +25,7 @@ int getopt(int argc, char *argv[], const char *optstring) {
     if (ol == 0) return GETOPT_DONE;
 
     // Every parameter checked?
-    if (argn >= argc) return GETOPT_DONE;
+    if (argn+noargc >= argc) return GETOPT_DONE;
 
 	// Are we analyzing the first character of an argument? It should be a '-'
     if (ap == 0) {
@@ -62,6 +62,7 @@ int getopt(int argc, char *argv[], const char *optstring) {
                     return GETOPT_NO_ARG;
                 }
                 optarg = argv[++argn];
+                optind++;
                 // Skip this argument and prepare to analyze the following one
                 argn++;
                 ap = 0;
