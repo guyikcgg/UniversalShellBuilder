@@ -117,6 +117,10 @@ void execute_command(int argc, char* argv[]) {
 /* arg: return a pointer to the n-th non-option argument */
 char *arg(const unsigned n) {
 
+    if (n>noarg) {
+        return NULL;
+    }
+
     return _argv[optind+n-1];
 }
 
@@ -234,7 +238,7 @@ int get_options(int argc, char *argv[], char *options) {
     }
 
     // No errors, everything ok
-    noarg = argc-optind+1;
+    noarg = argc-optind;
 
     return 0;
 
