@@ -64,7 +64,7 @@ unsigned separate_args(char *msg, char *argv[]) {
 
 	while(*msg) {
 		while(*msg == ' ') *msg++ = '\0';
-		argv[argc++] = msg;
+		if (*msg) argv[argc++] = msg;
 		while(*msg && *msg != ' ') msg++;
 	}
 
