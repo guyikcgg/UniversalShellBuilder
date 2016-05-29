@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
                     input_buffer[i] = 0;
             }
             input_argc = separate_args(input_buffer, input_argv);
-            execute_command(input_argc, input_argv);
+            if (input_argc) execute_command(input_argc, input_argv);
         }
     }
     return 0;
