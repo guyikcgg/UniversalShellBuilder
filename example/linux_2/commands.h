@@ -26,7 +26,7 @@
 #ifdef CMD_AUTOHELP
     struct _command {
         char *name;
-        int (*function) (int argc, char *argv[]);
+        int (*function) (void);
         const char *help;
     };
 
@@ -35,7 +35,7 @@
 #else
     struct _command {
         char *name;
-        int (*function) (int argc, char *argv[]);
+        int (*function) (void);
     };
 
     #define COMMAND(NAME)  { #NAME, cmd_ ## NAME }
@@ -64,7 +64,7 @@ char *arg(const unsigned n);
 char opt(const char opt);
 char *opt_content(const char opt);
 union _option opt_union(const char opt);
-int get_options(int argc, char *argv[], char *options);
+int get_options(char *options);
 unsigned command_name(char *name);
 void default_cmd_error(enum _error_code error, char* arg);
 

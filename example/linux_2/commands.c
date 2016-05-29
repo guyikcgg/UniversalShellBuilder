@@ -99,8 +99,11 @@ unsigned command_name(char *name) {
 void execute_command(int argc, char* argv[]) {
     unsigned command_number = command_name(argv[0]);
 
+    _argc = argc;
+    _argv = argv;
+
     if (command_number < N_COMMANDS) {
-        commands[command_number].function(argc, argv);
+        commands[command_number].function();
     } else {
         if (!strcmp(argv[0], "help")) {
             if (argc > 1) {
@@ -162,15 +165,13 @@ union _option opt_union(const char opt) {
 
 /* get_options: get every option received in the arguments and register them
         in 'options'. On error, print help */
-int get_options(int argc, char *argv[], char *options) {
+int get_options(char *options) {
     char h_options[CMD_MAX_N_OPTIONS + CMD_MAX_N_OPTIONS_WITH_ARGS + 2];
     unsigned i, j;
     int c;
 
     // Register globals
     possible_options = options;
-    _argc = argc;
-    _argv = argv;
 
     #if (CMD_DEBUG)
         for (i=0; options[i]; i++);
@@ -238,7 +239,7 @@ int get_options(int argc, char *argv[], char *options) {
     }
 
     // No errors, everything ok
-    noarg = argc-optind;
+    noarg = _argc-optind;
 
     return 0;
 

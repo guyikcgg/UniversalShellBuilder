@@ -13,7 +13,7 @@ const char cmd_example_help[] =
                 NL
                 "example [-h]" NL
                 NL;
-int cmd_example(int argc, char *argv[]) {
+int cmd_example() {
     int error;
     int i;
 
@@ -23,7 +23,7 @@ int cmd_example(int argc, char *argv[]) {
     }
     */
 
-    if (error = get_options(argc, argv, "t:ab:c")) return error;
+    if (error = get_options("t:ab:c")) return error;
 
 
     if (opt('t'))
@@ -56,13 +56,13 @@ const char cmd_cat_help[] =
                 NL
                 "cat [-n] FILE_NAME" NL
                 NL;
-int cmd_cat(int argc, char *argv[]) {
+int cmd_cat() {
     int error = 0;
     FILE *f;
     char buffer[16] = {0};
     long unsigned i = 1;
 
-    if (error = get_options(argc, argv, "n")) return error;
+    if (error = get_options("n")) return error;
 
     if (arg(1)) {
         f = fopen(arg(1), "r");
