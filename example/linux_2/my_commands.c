@@ -7,7 +7,12 @@
 *          COMMANDS         *
 *    (your commands here)   *
 ****************************/
-/* cmd_example: a example command */
+
+const char cmd_example_help[] =
+                "example - the prototype for any command" NL
+                NL
+                "example [-h]" NL
+                NL;
 int cmd_example(int argc, char *argv[]) {
     int error;
     int i;
@@ -46,35 +51,39 @@ int cmd_example(int argc, char *argv[]) {
 }
 
 
-/*****************************
-*        COMMAND HELP        *
-*****************************/
-const char cmd_example_help[] =
-                "example - the prototype for any command" NL
+const char cmd_cat_help[] =
+                "cat - print the content of a single file" NL
                 NL
-                "example [-h]" NL
+                "cat [-n] FILE_NAME" NL
                 NL;
-
-
-const char cmd_cat_help[] = "";
 int cmd_cat(int argc, char *argv[]) {
     int error = 0;
     FILE *f;
     char buffer[16] = {0};
+    long unsigned i = 1;
 
-    if (error = get_options(argc, argv, "")) return error;
+    if (error = get_options(argc, argv, "n")) return error;
 
     if (arg(1)) {
         f = fopen(arg(1), "r");
 
+
+        if (opt('n')) {
+            printf("%4ld.\t", i++);
+        }
         while (!feof(f)) {
             printf("%s", buffer);
+            if (opt('n')) {
+                if (buffer[strlen(buffer)-1] == '\n') {
+                    printf("%4ld.\t", i++);
+                }
+            }
             fgets(buffer, 16, f);
         }
 
         fclose(f);
     } else {
-        printf ("Error: cat expects one argument!");
+        printf ("Error: cat expects an argument!");
     }
 
 
