@@ -1,6 +1,7 @@
 #include "my_commands.h"
 #include "commands.h"
 #include <string.h>
+#include <stdio.h>
 
 /****************************
 *          COMMANDS         *
@@ -38,7 +39,7 @@ int cmd_example(int argc, char *argv[]) {
     }
     */
     //noarg = argc-optind+1;
-    for (i=1; i<noarg; i++)
+    for (i=1; i<=noarg; i++)
         printf ("%d - %s\n", i, arg(i));
     return 0;
 
@@ -57,6 +58,26 @@ const char cmd_example_help[] =
 
 const char cmd_cat_help[] = "";
 int cmd_cat(int argc, char *argv[]) {
+    int error = 0;
+    FILE *f;
+    char buffer[16] = {0};
+
+    if (error = get_options(argc, argv, "")) return error;
+
+    if (arg(1)) {
+        f = fopen(arg(1), "r");
+
+        while (!feof(f)) {
+            printf("%s", buffer);
+            fgets(buffer, 16, f);
+        }
+
+        fclose(f);
+    } else {
+        printf ("Error: cat expects one argument!");
+    }
+
+
     return 0;
 }
 
