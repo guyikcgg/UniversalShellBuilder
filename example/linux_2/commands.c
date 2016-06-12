@@ -1,12 +1,9 @@
 /*******************************************************************************
+* commands.c
 *
-* commands.prototype
-* ------------------
+* The body of the library.
 *
-* This file can be used to add a command shell to your project.
-*
-* It will depend at least on data input and output, so it can be treated as a
-* second 'main.c' file.
+* NOTE This file is part of UniversalShellBuilder.
 *
 *******************************************************************************/
 

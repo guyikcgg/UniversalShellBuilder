@@ -1,18 +1,35 @@
+/*******************************************************************************
+* my_commands.c                                                                *
+* 																			   *
+* Code (and help string) for every command.                                    *
+* 																			   *
+* ATTENTION!! You have to enumerate all your commands                          *
+*             at the end of this file!!                                        *
+*             																   *
+*******************************************************************************/
+
+
+
+/****************************
+*          INCLUDES         *
+****************************/
 #include "my_commands.h"
 #include "commands.h"
 #include <string.h>
 #include <stdio.h>
 
+
 /****************************
 *          COMMANDS         *
 *    (your commands here)   *
 ****************************/
-
+#ifdef CMD_AUTOHELP
 const char cmd_example_help[] =
-                "example - the prototype for any command" NL
-                NL
-                "example [-h]" NL
-                NL;
+        "example - the prototype for any command" NL
+        NL
+        "example [-h]" NL
+        NL;
+#endif
 int cmd_example() {
     int error;
     int i;
@@ -50,12 +67,13 @@ int cmd_example() {
 
 }
 
-
+#ifdef CMD_AUTOHELP
 const char cmd_cat_help[] =
-                "cat - print the content of a single file" NL
-                NL
-                "cat [-n] FILE_NAME" NL
-                NL;
+        "cat - print the content of a single file" NL
+        NL
+        "cat [-n] FILE_NAME" NL
+        NL;
+#endif
 int cmd_cat() {
     int error = 0;
     FILE *f;
@@ -90,8 +108,9 @@ int cmd_cat() {
     return 0;
 }
 
+
 /*****************************
-*          COMMANDS          *
+*     COMMANDS DEFINITION    *
 *****************************/
 const struct _command commands[] = {
     // Your commands here ->
