@@ -13,7 +13,7 @@
 
 //#define CMD_DEBUG
 
-/* WORKING MODES */
+/* DEFAULT WORKING MODES */
 #ifndef CMD_NO_AUTOHELP
 #define CMD_AUTOHELP
 #endif
@@ -80,9 +80,7 @@ int default_cmd_help        (char *command);
 int default_cmd_not_valid   (char *command);
 
 /* SOME DEFINITIONS */
-// Under construction...
-#define MAX_MSG_LENGTH          200              //For the receiving frame... (circular buffer)
-
+// NOTE Under construction...
 
 #ifndef CMD_MAX_N_OPTIONS
 #define CMD_MAX_N_OPTIONS           10
@@ -93,6 +91,8 @@ int default_cmd_not_valid   (char *command);
 #ifndef NL
 #define NL "\n"
 #endif
+
+//TODO NOT GENERAL!!!
 // Sugested definitions:
 #ifndef TRUE
 #define TRUE  1
@@ -101,6 +101,7 @@ int default_cmd_not_valid   (char *command);
 #define FALSE 0
 #endif
 
+//TODO NOT GENERAL!!!
 /* GPRINT */
 #ifndef gprint
 // On GNU/Linux
@@ -108,6 +109,8 @@ int default_cmd_not_valid   (char *command);
 #define gprint(str) printf("%s", str)
 #endif
 
+
+// TODO shorter strings, more schematic!
 /* STRINGS */
 #ifndef CMD_STR_PROJECT_TITLE
 #define CMD_STR_PROJECT_TITLE "UniversalCommandBuilder project" NL NL
