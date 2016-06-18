@@ -64,17 +64,22 @@ int strcmp(const char *str1, const char *str2) {
     return d;
 }
 
-/* separate_args: splits a message in arguments separated by ' ' */
-unsigned separate_args(char *msg, char *argv[]) {
+/* separate_args: splits a message in arguments separated by a specified char c */
+unsigned separate_args_char(char *msg, char *argv[], char c) {
     unsigned argc = 0;
 
 	while(*msg) {
-		while(*msg == ' ') *msg++ = '\0';
+		while(*msg == c) *msg++ = '\0';
 		if (*msg) argv[argc++] = msg;
-		while(*msg && *msg != ' ') msg++;
+		while(*msg && *msg != c) msg++;
 	}
 
 	return argc;
+}
+
+/* separate_args: splits a message in arguments separated by ' ' */
+unsigned separate_args(char *msg, char *argv[]) {
+	return separate_args_char(msg, argv, ' ');
 }
 
 

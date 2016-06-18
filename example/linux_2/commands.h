@@ -63,6 +63,7 @@ enum _error_code {
 
 /* GENERAL FUNCTIONS */
 unsigned separate_args(char *msg, char *argv[]);
+unsigned separate_args_char(char *msg, char *argv[], char c);
 void execute_command(int argc, char* argv[]);
 char *arg(const unsigned n);
 char opt(const char opt);
