@@ -20,7 +20,7 @@ This library will be tested on Arduino boards, PIC microcontrollers from Microch
 It also will include example for some of these microcontrollers.
 
 ##Library overview
-The library allows analyzing commands with options and arguments.
+The library allows analyzing commands with options and arguments in a Unix-like fashion.
 
 Call `separate_args` over your Rx buffer to get a list with the received command and its arguments (i.e. separate_args will provide `argc` and `argv` in standard format).
 Then, just call `execute_command` to check whether the command exists and call the function associated to this command.
