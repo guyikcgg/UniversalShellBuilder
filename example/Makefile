@@ -4,13 +4,12 @@
 
 
 # TODO Show a menu for choosing the example to be compiled
-example: example-linux
+#example: example-linux
 
 
 # Compile example for linux
 example-linux:
-	cd linux
-	$(MAKE) $(MFLAGS)
+	cd linux; $(MAKE) $(MFLAGS)
 
 # Use the following lines as a reference for easy compilation
 example-linux-hard:
@@ -35,5 +34,4 @@ clean-linux-hard: clean
 	rm -f getopt.c getopt.h commands.c commands.h
 
 clean all: clean
-	cd linux
-	$(MAKE) $(MFLAGS)
+	cd linux; $(MAKE) $(MFLAGS)

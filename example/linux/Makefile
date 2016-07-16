@@ -5,7 +5,7 @@
 # This example depends on some files located in the root directory,
 # which makes it a little bit chaotic. For the most simple way of
 # compiling this example, refer to `make example-linux-hard` in
-# *example/makefile*.
+# *example/Makefile*.
 
 
 # Some constants
