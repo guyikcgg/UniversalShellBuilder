@@ -2,5 +2,5 @@
 *.gch
 *~
 *_OLD.*
-example/*/example
+example/example
 tags

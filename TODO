@@ -1,0 +1,23 @@
+* Do not show error on empty line -- RESOLVED
+* Add log posibility
+    * Add support for UP_ARROW, DOWN_ARROW, TAB...
+* Remove arguments inside the functions  -- HALF-DONE
+* Example for Arduino
+* Example for DAVE (using dbg_serial and usb_vcom)
+* Compare getopt to gnu's getopt (at least the behaviour) -- HALF-DONE
+* Simplify strings to make customization simpler
+* Create a clear interface (static library + customizable my_commands)
+* Measure the size of the library (in terms of used memory)
+* Allow the user handle '-h' option in auto-help mode
+* Write documentation
+* Use docblockr to make doxygen-compatible documentation
+* Give control of the terminal to a command
+* Use Ctrl+C to stop a command which is executing
+* Include that code to get compatibility with C++
+
+* Create several versions of UniversalShellBuilder (Arduino / PIC / XMC / DAVE)?
+* Create a 'cat' example to demonstrate the use of non-option arguments -- DONE
+* Another bug in getopt... (when example -ab adsf -c adfs) -- RESOLVED
+* Easy non-option arguments handling -- DONE
+* Modify default_cmd_error to avoid string unions
+* Give support to -N options (where N is a number)

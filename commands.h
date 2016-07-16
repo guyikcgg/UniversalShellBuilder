@@ -11,7 +11,7 @@
 #define COMMANDS_H
 
 /* INCLUDES */
-#include "../../getopt.h"
+#include "getopt.h"
 //#include <getopt.h>
 #include "my_commands.h"
 
