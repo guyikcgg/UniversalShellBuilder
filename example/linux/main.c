@@ -24,9 +24,10 @@ int main(int argc, char *argv[]) {
 
             // Detect end of the command
             for (i=0; input_buffer[i]; i++) {
-                if (input_buffer[i] == '\n' || input_buffer[i] == '\r')
+                if (input_buffer[i] == '\n' || input_buffer[i] == '\r') {}
                     input_buffer[i] = 0;
                     command_available = 1;
+                }
             }
 
             if (command_available) {
