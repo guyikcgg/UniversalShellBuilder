@@ -21,6 +21,9 @@ example-linux-hard:
 run: example
 	./example $(ARGS)
 
+debug: example
+	gdb ./example
+
 
 # Clean stuff
 .PHONY: clean clean-linux-hard clean-all
