@@ -24,7 +24,7 @@ The library allows analyzing commands with options and arguments in a Unix-like 
 
 Call `separate_args` over your Rx buffer to get a list with the received command and its arguments (i.e. separate_args will provide `argc` and `argv` in standard format).
 Then, just call `execute_command` to check whether the command exists and call the function associated to this command.
-These functions have the form `cmd_[name of the command]` (e.g. `cmd_echo`).
+These functions have the form `cmd_[name-of-the-command]` (e.g. `cmd_echo`).
 
 Handling options and arguments inside the functions is easy. This is all you need:
  * `opt([option])` to check if *option* was received
@@ -37,12 +37,12 @@ Automatic error messages are displayed on the following events:
  * Option expects an argument
 
 In addition, the user can get a list of the available commands by typing `help` on the terminal.
-A help string can also be defined for every command. Name this strings using `cmd_[name of the command]_help` convention to have them displayed on `help [name-of-the-command]` or `[name-of-the-command] -h` inputs.
+A help string can also be defined for every command. Name this strings using `cmd_[name-of-the-command]_help` convention to have them displayed on `help [name-of-the-command]` or `[name-of-the-command] -h` inputs.
 
 ## Getting started
 Just copy the library files (i.e. `commands.c`, `commands.h`, `getopt.c` and `getopt.h`) to your project.
 
-Then, just write your commands (i.e. `cmd_[name of the commnad]`) in a file called `my_commands.c`.
+Then, just write your commands (i.e. `cmd_[name-of-the-commnad]`) in a file called `my_commands.c`.
 You will also need a configuration file called `my_commands.h`, which will be included in `commands.h`.
 You can use the provided files in any example as a template to get started.
 
