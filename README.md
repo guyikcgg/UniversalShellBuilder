@@ -7,12 +7,11 @@ Maybe we just want to veryfy that a task is being done, or we want to request so
 
 I have had to perform this task a couple of times, for different projects on different microcontrollers.
 For this reason, I am writing this library, which should meet the following requirements:
- 1. Reliable.
- 2. Compatible.
- 3. Tiny-size, huge performance.
- 4. Easy to use (little code needed).
- 5. Versatile (to be used in every project requiring a shell).
- 6. 
+ 1. Reliable
+ 2. Compatible
+ 3. Tiny-size, huge performance
+ 4. Easy to use (little code needed)
+ 5. Versatile (to be used in every project requiring a shell)
 
 This library is to be written in pure C programming language, to maximize compatibility.
 
@@ -20,7 +19,7 @@ This library is to be written in pure C programming language, to maximize compat
 This library will be tested on Arduino boards, PIC microcontrollers from Microchip and XMC microcontrollers from Infineon.
 It also will include example for some of these microcontrollers.
 
-##Library overview
+## Library overview
 The library allows analyzing commands with options and arguments in a Unix-like fashion.
 
 Call `separate_args` over your Rx buffer to get a list with the received command and its arguments (i.e. separate_args will provide `argc` and `argv` in standard format).
@@ -29,7 +28,7 @@ These functions have the form `cmd_[name of the command]` (e.g. `cmd_echo`).
 
 Handling options and arguments inside the functions is easy. This is all you need:
  * `opt([option])` to check if *option* was received
- * `opt_content([option])` to get the argument received with *option* (if it is supposed to accept an argument)
+ * `opt([option])` to get the argument received with *option* (if it is supposed to accept an argument)
  * `arg([n])` to get the n-th non-option argument.
 
 Automatic error messages are displayed on the following events:
@@ -38,7 +37,7 @@ Automatic error messages are displayed on the following events:
  * Option expects an argument
 
 In addition, the user can get a list of the available commands by typing `help` on the terminal.
-A help string can also be defined for every command. Name this strings using `cmd_[name of the command]_help` convention to have them displayed on `help [name of the command]` or `[name of the command] -h` inputs.
+A help string can also be defined for every command. Name this strings using `cmd_[name of the command]_help` convention to have them displayed on `help [name-of-the-command]` or `[name-of-the-command] -h` inputs.
 
 ## Getting started
 Just copy the library files (i.e. `commands.c`, `commands.h`, `getopt.c` and `getopt.h`) to your project.
