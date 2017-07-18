@@ -1,5 +1,5 @@
 # This *makefile* compiles the example for linux. The output will be
-# produced in *example* directory. To easily run this example, execute
+# the file `linux_example`. To easily run this example, execute
 # `make run` from *example* directory.
 #
 # This example depends on some files located in the root directory,
@@ -8,41 +8,50 @@
 # *example/Makefile*.
 
 
-# Some constants
+# Directory for library includes
 IDIR = ../../
-CC = gcc
-CFLAGS = -I$(IDIR) -I. -ggdb
 
-ODIR = obj
+# Directory for library source
 LDIR = ../../
 
+# Directory for generated object files
+ODIR = ./obj
+
+# Include paths for the compiler
+INCLUDES = -I$(IDIR) -I./
+
+# C Compiler
+CC = gcc
+
+# Compiler flags
+CFLAGS = -g
+
+# Command for making directories
 MKDIR = mkdir
 
-_DEPS = getopt.h commands.h
+# Dependencies - header files
+_DEPS = getopt.h commands.h minimal_lib.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS)) my_commands.h
 
+# Object files to be generated
 _OBJ = getopt.o commands.o my_commands.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 
+
 # Compile the main program
-main: $(OBJ) main.c
-	gcc -o ../example $^ $(CFLAGS) $(LIBS)
+linux_example: $(OBJ) main.c
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $^
 
-
-# Dependencies in root folder
-$(ODIR)/commands.o: $(LDIR)commands.c $(ODIR)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-$(ODIR)/getopt.o: $(LDIR)getopt.c $(ODIR)
-	$(CC) -c -o $@ $<
-
-# Dependencies from this example
+# Compile dependencies from current directory
 $(ODIR)/%.o: %.c $(DEPS) $(ODIR)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
+# Compile dependencies from lib directory
+$(ODIR)/%.o: $(LDIR)/%.c $(DEPS) $(ODIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
-# Objects directory
+# Make the objects directory
 $(ODIR):
 	$(MKDIR) $@
 
@@ -51,4 +60,4 @@ $(ODIR):
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+	rm -rf $(ODIR) linux_example
