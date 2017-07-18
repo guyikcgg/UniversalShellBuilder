@@ -7,19 +7,16 @@
 *
 *******************************************************************************/
 
-#ifndef COMMANDS_H
-#define COMMANDS_H
-
-/* INCLUDES */
-#include "getopt.h"
-//#include <getopt.h>
-#include "my_commands.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "getopt.h"
+#ifndef COMMANDS_H
+#define COMMANDS_H
+
+/* INCLUDES */
+#include <my_commands.h>
+#include <getopt.h>
 
 //#define CMD_DEBUG
 
