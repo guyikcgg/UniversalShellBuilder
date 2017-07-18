@@ -7,6 +7,10 @@
 #ifndef _OPTGET_H
 #define _OPTGET_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <string.h>
 
 #define GETOPT_DONE     -1
@@ -21,5 +25,9 @@ extern int optind;
 extern int opterr;
 extern int optopt;
 extern int noargc;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* OPTGET_H_ */

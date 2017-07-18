@@ -15,6 +15,12 @@
 //#include <getopt.h>
 #include "my_commands.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "getopt.h"
+
 //#define CMD_DEBUG
 
 /* DEFAULT WORKING MODES */
@@ -140,4 +146,8 @@ int default_cmd_not_valid   (char *command);
 #endif
 
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
