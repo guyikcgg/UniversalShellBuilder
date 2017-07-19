@@ -68,6 +68,52 @@ int cmd_example() {
 }
 
 #ifdef CMD_AUTOHELP
+const char cmd_hello_help[] =
+        "hello - say hello!" NL
+        NL
+        "usage: hello [-s] <somebody>" NL
+        NL
+        " -s \tspecial greetings" NL
+        " -m \tadd a personalized message" NL
+        NL;
+#endif
+int cmd_hello() {
+    int error;
+    int i;
+
+    if (error = get_options("sm:")) return error;
+
+    // Check the number of arguments
+    if (noarg == 0) {
+        // Greet the World
+        printf("Hello World!");
+    } else if (noarg == 1) {
+        // Greet somebody
+        printf("Hello %s!", arg(1));
+    } else {
+        // Give an error message
+        printf("ERROR: Too much people to greet... ^^'\n");
+        for (i=1; i<=noarg; i++) {
+            printf("%s\n", arg(i));
+        }
+        return -1;
+    }
+
+    // Should we give an special greeting?
+    if (opt('s')) {
+        printf(" You look great!");
+    }
+
+    // Do we have any message?
+    if (opt('m')) {
+        printf(" I have a message for you: '%s'\n", opt_content('m'));
+    }
+
+    return 0;
+}
+
+
+#ifdef CMD_AUTOHELP
 const char cmd_count_help[] =
         "count - count from 1 to N" NL
         NL
@@ -193,7 +239,8 @@ int cmd_cat() {
 const struct _command commands[] = {
     // Your commands here ->
     COMMAND(example),
+    COMMAND(hello),
+    COMMAND(count),
     COMMAND(cat),
-    COMMAND(count)
 };
 const unsigned N_COMMANDS = sizeof commands / sizeof commands[0];
