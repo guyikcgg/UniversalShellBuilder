@@ -68,6 +68,32 @@ int cmd_example() {
 }
 
 #ifdef CMD_AUTOHELP
+const char cmd_echo_help[] =
+        "echo - display a line of text" NL
+        NL
+        " -n \tdo not output the trailing newline" NL
+        NL;
+#endif
+int cmd_echo() {
+    int error;
+    int i;
+
+    if (error = get_options("n")) return error;
+
+    // Print every argument (because it is actually the same string)
+    for (i=1; i<=noarg; i++) {
+        printf("%s ", arg(i));
+    }
+
+    // Print the trailing newline
+    if (!opt('n')) {
+        printf("\n");
+    }
+}
+
+// TODO Add cmd_echo
+
+#ifdef CMD_AUTOHELP
 const char cmd_hello_help[] =
         "hello - say hello!" NL
         NL
@@ -239,6 +265,7 @@ int cmd_cat() {
 const struct _command commands[] = {
     // Your commands here ->
     COMMAND(example),
+    COMMAND(echo),
     COMMAND(hello),
     COMMAND(count),
     COMMAND(cat),
