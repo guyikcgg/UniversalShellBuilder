@@ -10,8 +10,13 @@
 
 
 
-#ifndef MY_COMMANDS_H
-#define MY_COMMANDS_H
+#ifndef _MY_COMMANDS_H
+#define _MY_COMMANDS_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /****************************
 *          INCLUDES         *
@@ -65,6 +70,8 @@
 
 
 
+#ifdef __cplusplus
+}
+#endif
 
-
-#endif /* MY_COMMANDS_H */
+#endif /* _MY_COMMANDS_H */
