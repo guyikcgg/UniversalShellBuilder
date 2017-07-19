@@ -4,7 +4,7 @@
 #include "commands.h"
 
 #define MAX_MSG_LENGTH          200              //For the receiving frame... (circular buffer)
-
+extern char exit_now;
 
 int main(int argc, char *argv[]) {
     char input_buffer[MAX_MSG_LENGTH];
@@ -39,6 +39,9 @@ int main(int argc, char *argv[]) {
                 if (input_argc) execute_command(input_argc, input_argv);
 
                 command_available = 0;
+
+                // Detect exit signal
+                if (exit_now) return 0;
             }
         }
     }

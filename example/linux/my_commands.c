@@ -18,6 +18,10 @@
 #include <string.h>
 #include <stdio.h>
 
+/****************************
+*      GLOBAL VARIABLES     *
+****************************/
+char exit_now = 0;
 
 /****************************
 *          COMMANDS         *
@@ -138,6 +142,22 @@ int cmd_hello() {
     return 0;
 }
 
+#ifdef CMD_AUTOHELP
+const char cmd_exit_help[] =
+        "exit - exit from the command line" NL
+        NL;
+#endif
+int cmd_exit() {
+    int error;
+
+    if (error = get_options("")) return error;
+
+    printf("Exiting...\n");
+
+    exit_now = 1;
+
+    return 0;
+}
 
 #ifdef CMD_AUTOHELP
 const char cmd_count_help[] =
@@ -269,5 +289,6 @@ const struct _command commands[] = {
     COMMAND(hello),
     COMMAND(count),
     COMMAND(cat),
+    COMMAND(exit)
 };
 const unsigned N_COMMANDS = sizeof commands / sizeof commands[0];
