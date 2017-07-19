@@ -68,6 +68,84 @@ int cmd_example() {
 }
 
 #ifdef CMD_AUTOHELP
+const char cmd_count_help[] =
+        "count - count from 1 to N" NL
+        NL
+        "usage: count [-f A] [-s C] N" NL
+        NL
+        " -f A\tcount from A on" NL
+        " -i I\tuse I as the increment between values" NL
+        " -r  \treverse count (needed for negative increments)" NL
+        NL;
+#endif
+int cmd_count() {
+    int error;
+
+    int count;      // Counter
+    int increment;  // Increment between values
+    int limit;      // Last number to count to
+
+    if (error = get_options("f:i:r")) return error;
+
+    // Get the option 'from', and initialize count
+    if (opt('f')) {
+        count = atoi(opt_content('f'));
+    } else {
+        count = 1;
+    }
+
+    // Get the option 'increment'
+    if (opt('i')) {
+        increment = atoi(opt_content('i'));
+
+        // Avoid infinite loops
+        if (increment == 0) {
+            printf("ERROR: the increment must be different to 0");
+            return -1;
+        } else if ((increment > 0) && opt('r')) {
+            printf("ERROR: on reverse count, the increment must be negative");
+            return -1;
+        } else if ((increment < 0) && !opt('r')) {
+            printf("ERROR: on straight count, the increment must be positive");
+            return -1;
+        }
+    } else {
+        // Default increment is +1 (or -1 on reverse count)
+        if (opt('r')) {
+            increment = -1;
+        } else {
+            increment = +1;
+        }
+    }
+
+    // Get the first argument
+    if ((noarg != 1) || arg(1) == NULL) {
+        printf("ERROR: count expects exactly one argument!!\n");
+        return -1;
+    } else {
+        limit = atoi(arg(1));
+    }
+
+    // Check for reverse count
+    if (opt('r')) {
+        // Reverse count and print the counter
+        while (count >= limit) {
+            printf("%d\n", count);
+            count += increment;
+        }
+    } else {
+        // Straight count and print the counter
+        while (count <= limit) {
+            printf("%d\n", count);
+            count += increment;
+        }
+    }
+
+    return 0;
+
+}
+
+#ifdef CMD_AUTOHELP
 const char cmd_cat_help[] =
         "cat - print the content of a single file" NL
         NL
@@ -116,5 +194,6 @@ const struct _command commands[] = {
     // Your commands here ->
     COMMAND(example),
     COMMAND(cat),
+    COMMAND(count)
 };
 const unsigned N_COMMANDS = sizeof commands / sizeof commands[0];
