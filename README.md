@@ -32,7 +32,7 @@ These functions have the form `cmd_[name of the command]` (e.g. `cmd_echo`).
 
 Handling options and arguments inside the functions is easy. This is all you need:
  * `opt([option])` to check if *option* was received
- * `opt([option])` to get the argument received with *option* (if it is supposed to accept an argument)
+ * `opt_content([option])` to get the argument received with *option* (if it is supposed to accept an argument)
  * `arg([n])` to get the n-th non-option argument.
 
 Automatic error messages are displayed on the following events:

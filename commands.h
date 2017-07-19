@@ -7,15 +7,17 @@
 *
 *******************************************************************************/
 
+#ifndef _COMMANDS_H
+#define _COMMANDS_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifndef COMMANDS_H
-#define COMMANDS_H
 
 /* INCLUDES */
 #include <my_commands.h>
+#include <minimal_lib.h>
 #include <getopt.h>
 
 //#define CMD_DEBUG
@@ -143,8 +145,8 @@ int default_cmd_not_valid   (char *command);
 #endif
 
 
-#endif
-
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* _COMMANDS_H */
