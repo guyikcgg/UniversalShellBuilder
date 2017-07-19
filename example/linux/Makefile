@@ -34,7 +34,7 @@ _DEPS = getopt.h commands.h minimal_lib.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS)) my_commands.h
 
 # Object files to be generated
-_OBJ = getopt.o commands.o my_commands.o
+_OBJ = getopt.o commands.o minimal_lib.o my_commands.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 
