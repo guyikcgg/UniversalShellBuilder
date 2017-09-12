@@ -1,19 +1,38 @@
-/* INCLUDES */
+// Included libraries
+
+// Standard input/output
 #include <stdio.h>
+// String manipulation
 #include <string.h>
+// UniversalShellBuilder
 #include "commands.h"
 
-#define MAX_MSG_LENGTH          200              //For the receiving frame... (circular buffer)
+// Size of `input_buffer` string
+#define MAX_MSG_LENGTH      200
+// Size of `input_argv` vector
+#define MAX_ARGV_LENGTH     CMD_MAX_N_OPTIONS+CMD_MAX_N_OPTIONS_WITH_ARGS
+
+// Exit signal used by commands to force the main() routine to return
 extern char exit_now;
 
+// Start of the main program
 int main(int argc, char *argv[]) {
+    // Local variables in main() routine
+
+    // Input buffer (the input stream will be stored in this variable)
     char input_buffer[MAX_MSG_LENGTH];
+    // Argument Counter for the input commands
     int  input_argc;
-    char *input_argv[CMD_MAX_N_OPTIONS+CMD_MAX_N_OPTIONS_WITH_ARGS];
+    // Argument Values for the input commands
+    char *input_argv[MAX_ARGV_LENGTH];
+    // General purpose integer counter
     int i;
+    // Availability of a command (treated as boolean)
     char command_available = 0;
 
+
     if (argc > 1) {
+        // If the program is executed with arguments,
         execute_command(argc-1, &argv[1]);
     } else {
         while (TRUE) {
@@ -21,12 +40,17 @@ int main(int argc, char *argv[]) {
             printf("\n> ");
 
             // Terminal input
+            // (read a line from the standard input into `input_buffer`.
+            // the maximum length of the string will be MAX_MSG_LENGTH-3)
             fgets(input_buffer, MAX_MSG_LENGTH-3, stdin);
 
-            // Detect end of the command
+            // Analyse the input_buffer and detect EOL
+            // (end of line = end of the command)
             for (i=0; input_buffer[i]; i++) {
                 if (input_buffer[i] == '\n' || input_buffer[i] == '\r') {
                     input_buffer[i] = 0;
+
+                    // Signal the availability of a command
                     command_available = 1;
                 }
             }
