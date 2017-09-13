@@ -33,15 +33,15 @@ The commands are defined using the `my_commands.c` file. This file is structured
 commands.
 2. *Global variables* to exchange data amongst commands or other functions
 (this is considered a bad coding practice, though it is needed some times).
-3. *Commands* this is the place to write the commands. Every command should be
-an `int` function taking no parameters.
+3. *Commands* this is the place to write the commands. Every command must be a `int` function taking no parameters. Additionally, a variable with the same name of the command can hold the help message for this command.
+
 
 ## Compile
-To compile this example, just run `make` from the command line. It will follow
-the instructions in the Makefile to compile the sources. An executable file called
-`linux_example` should be present as the output.
+To compile this example, just run `make` from the command line. The file `linux_example` will be compiled from the source.
 
 
+## Usage
+To run the example, type `./linux_example` from the command line. A *greater-than* sign (`> _`) will be printed on the screen, prompting you to introduce a command.
 
 
 ## Available commands
@@ -49,6 +49,8 @@ The following commands are available from the shell built by `main.c` and `my_co
 
 * **`echo`** display a line of text.
 * **`hello`** display a *hello* message, greet somebody, and add a special message.
-* **`count`** count from 1 to given number N. The behaviour can be modified by using options.
+* **`count`** count from *1* to a given number *N*. The behaviour can be modified by using options.
 * **`cat`** print the content of a single file.
-* **`exit`** tell the `main()` routine to return, causing the end of the program. Internally, this commands sets `exit_now` global variable to `1`, letting `main()` to know it is meant to return.
+* **`exit`** tell the `main()` routine to return, causing the end of the program. Internally, this commands sets `exit_now` global variable to `1`, letting `main()` know it is meant to return.
+
+Help about any command can be obtained by typing `help [command]`.
