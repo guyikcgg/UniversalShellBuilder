@@ -31,8 +31,23 @@ int main(int argc, char *argv[]) {
     char command_available = 0;
 
 
+    printf(
+        "\n"
+        "UniversalShellBuilder - Example for GNU/Linux v0.2\n"
+        "\n"
+        "Copyright (c) 2017 Cristian G Guerrero\n"
+        "\n"
+        "\n"
+        "Type 'help' to get a list of the available commands.\n"
+    );
+
     if (argc > 1) {
         // If the program is executed with arguments,
+        // execute the provided command
+        printf("> ");
+        for (i=1; i<argc; i++) {
+            printf("%s ", argv[i]);
+        }
         execute_command(argc-1, &argv[1]);
     } else {
         while (TRUE) {

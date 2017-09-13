@@ -1,4 +1,4 @@
-# Linux Example
+# Example for GNU/Linux v0.2
 
 This example demonstrates the use of UniversalShellBuilder to build a simple
 shell within a Linux program.
