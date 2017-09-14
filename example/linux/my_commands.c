@@ -95,7 +95,6 @@ int cmd_echo() {
     }
 }
 
-// TODO Add cmd_echo
 
 #ifdef CMD_AUTOHELP
 const char cmd_hello_help[] =
