@@ -56,7 +56,7 @@ unsigned separate_args_char(char *msg, char *argv[], char c) {
 }
 
 /* separate_args: splits a message in arguments separated by ' ' */
-inline unsigned separate_args(char *msg, char *argv[]) {
+unsigned separate_args(char *msg, char *argv[]) {
 	return separate_args_char(msg, argv, ' ');
 }
 
