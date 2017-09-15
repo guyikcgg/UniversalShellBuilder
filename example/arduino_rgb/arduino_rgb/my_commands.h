@@ -16,7 +16,12 @@
 /****************************
 *          INCLUDES         *
 ****************************/
-#include <stdio.h>
+#include "Arduino.h"
+
+extern const int   red_pin;
+extern const int green_pin;
+extern const int  blue_pin;
+extern const int flash_pin;
 
 
 /****************************
@@ -24,9 +29,8 @@
 *    (the output for the    *
 *     library functions)    *
 ****************************/
-
-// In the case we are on a PC...
-#define gprint(str) printf("%s", str)
+#define gprint(str) Serial.print(str)
+//sprintf(out_buffer, "%s", str)
 
 
 /****************************
@@ -50,7 +54,7 @@
 /****************************
 *     STRING DEFINITIONS    *
 ****************************/
-#define CMD_STR_PROJECT_TITLE "UniversalCodeBuilder Example for Linux v0.1" NL NL
+#define CMD_STR_PROJECT_TITLE "UniversalCodeBuilder Example for Arduino v0.1" NL NL
 #define CMD_STR_NOT_VALID_COMMAND "is not recognized as a valid command" NL NL
 #define CMD_STR_ADDITIONAL_HELP "Type 'help [command]' for additional help." NL "Press Ctrl+C to exit." NL
 #define CMD_STR_AVAILABLE_COMMANDS "Available commands:" NL

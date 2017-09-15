@@ -11,9 +11,13 @@
 #define COMMANDS_H
 
 /* INCLUDES */
-#include "../../getopt.h"
-//#include <getopt.h>
 #include "my_commands.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "getopt.h"
 
 //#define CMD_DEBUG
 
@@ -62,7 +66,7 @@ enum _error_code {
 };
 
 /* GENERAL FUNCTIONS */
-inline unsigned separate_args(char *msg, char *argv[]);
+unsigned separate_args(char *msg, char *argv[]);
 unsigned separate_args_char(char *msg, char *argv[], char c);
 void execute_command(int argc, char* argv[]);
 char *arg(const unsigned n);
@@ -140,4 +144,8 @@ int default_cmd_not_valid   (char *command);
 #endif
 
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

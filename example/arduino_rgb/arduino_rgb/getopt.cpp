@@ -1,4 +1,4 @@
-#include <getopt.h>
+#include "getopt.h"
 
 /* Variables used by getopt */
 char *optarg  = NULL;
@@ -8,8 +8,8 @@ int optopt    =    0;
 int noargc    =    0;       // non-option argument count
 
 static unsigned argn = 1;
-static unsigned ap   = 0;   // argument pointer
-static unsigned ol   = 0;   // option length
+static unsigned ap = 0;     // argument pointer
+static unsigned ol = 0;     // option length
 
 
 /* getopt: gets the options from an argument list */

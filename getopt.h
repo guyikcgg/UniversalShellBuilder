@@ -1,13 +1,18 @@
 /*
- * optget.h
+ * getopt.h
  *
  *      Author: Cristian G Guerrero
  */
 
-#ifndef _OPTGET_H
-#define _OPTGET_H
+#ifndef _GETOPT_H
+#define _GETOPT_H
 
-#include <string.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+#include <minimal_lib.h>
 
 #define GETOPT_DONE     -1
 #define GETOPT_NO_ARG   ':'
@@ -22,4 +27,9 @@ extern int opterr;
 extern int optopt;
 extern int noargc;
 
-#endif /* OPTGET_H_ */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* GETOPT_H_ */
