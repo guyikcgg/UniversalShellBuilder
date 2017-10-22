@@ -24,7 +24,7 @@ INCLUDES = -I$(IDIR) -I./
 CC = gcc
 
 # Compiler flags
-CFLAGS = -g
+CFLAGS = -g -Wall
 
 # Command for making directories
 MKDIR = mkdir
